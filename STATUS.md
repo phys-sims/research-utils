@@ -98,7 +98,7 @@ Any breaking change to these requires:
 | `SimulationEvaluator` | ✅ | Adapter-backed evaluator now returns objective and metrics deterministically. |
 | `RandomStrategy` | ✅ | Always-available deterministic uniform sampling strategy implemented and tested for seed reproducibility. |
 | `SobolStrategy` | ✅ | Implemented behind SciPy import guard; raises a clear runtime error when SciPy is unavailable. |
-| `CMAESStrategy` | ⬜ | Optional dependency |
+| `CMAESStrategy` | ✅ | Implemented behind `cma` import guard with deterministic seeding and bound-constrained ask/tell behavior. |
 | Constraint handling | ⬜ | Penalties / feasibility |
 | Strategy composition | ⬜ | Pipeline / portfolio |
 | Deterministic logging | ✅ | JSONL/CSV logger with run metadata and best-so-far snapshots integrated with OptimizationRunner. |

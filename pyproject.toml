@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "research-utils"
+version = "0.0.0"
+description = "Shared research infrastructure for deterministic experimentation"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "research-utils contributors" }]
+dependencies = []
+
+[project.optional-dependencies]
+harness = [
+  "matplotlib>=3.8",
+]
+ml = [
+  "numpy>=1.26",
+]
+agent = [
+  "pydantic>=2.7",
+]
+all = [
+  "research-utils[harness,ml,agent]",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["research_utils*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_unused_ignores = true
+mypy_path = "src"
+packages = ["research_utils"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+pythonpath = ["src"]

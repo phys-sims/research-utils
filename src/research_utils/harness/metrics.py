@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 from statistics import mean
-from typing import Callable, Mapping
 
 from research_utils.shared import EvalResult
 

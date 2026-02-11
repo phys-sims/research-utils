@@ -2,11 +2,10 @@
 
 from __future__ import annotations
 
+import random
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from itertools import product
-import random
-from typing import Mapping, Sequence
-
 
 SamplePoint = dict[str, float]
 SamplingMode = str

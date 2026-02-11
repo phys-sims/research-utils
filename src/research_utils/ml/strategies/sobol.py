@@ -27,7 +27,11 @@ class SobolStrategy(OptimizerStrategy):
         if qmc is None:
             msg = "SobolStrategy requires scipy. Install research-utils[ml] with scipy."
             raise RuntimeError(msg)
-        self._engine = qmc.Sobol(d=len(self.parameter_space.parameters), scramble=True, seed=self.seed)
+        self._engine = qmc.Sobol(
+            d=len(self.parameter_space.parameters),
+            scramble=True,
+            seed=self.seed,
+        )
 
     def ask(self) -> Candidate:
         sample = self._engine.random(1)[0]

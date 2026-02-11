@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Any
 
 from research_utils.ml.evaluator import SimulationEvaluator
 from research_utils.ml.logging import OptimizationLogger

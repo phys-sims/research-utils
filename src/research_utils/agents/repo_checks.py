@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 import ast
+from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable
 
 
 @dataclass(frozen=True)
@@ -36,7 +36,9 @@ def check_script_metadata(
     issue_list: list[RepoIssue] = []
     issue_list.extend(_check_missing_seeds(source))
     issue_list.extend(_check_missing_config_hash_or_provenance(source))
-    issue_list.extend(_check_invalid_parameter_paths(source, valid_paths=set(valid_parameter_paths)))
+    issue_list.extend(
+        _check_invalid_parameter_paths(source, valid_paths=set(valid_parameter_paths))
+    )
 
     return RepoCheckResult(path=path, issues=tuple(issue_list))
 
@@ -45,11 +47,17 @@ def _check_missing_seeds(source: str) -> list[RepoIssue]:
     issues: list[RepoIssue] = []
     if "# seed_policy:" not in source:
         issues.append(
-            RepoIssue(code="missing-seed-policy", message="Missing '# seed_policy:' metadata header.")
+            RepoIssue(
+                code="missing-seed-policy",
+                message="Missing '# seed_policy:' metadata header.",
+            )
         )
     if "def main(*, seed: int)" not in source:
         issues.append(
-            RepoIssue(code="missing-seed-argument", message="main must require an explicit 'seed' argument.")
+            RepoIssue(
+                code="missing-seed-argument",
+                message="main must require an explicit 'seed' argument.",
+            )
         )
     return issues
 

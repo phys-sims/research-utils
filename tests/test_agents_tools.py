@@ -13,7 +13,6 @@ from research_utils.agents import (
     generate_experiment_script,
 )
 
-
 GOLDEN_DIR = Path(__file__).parent / "golden" / "agents"
 
 
@@ -78,4 +77,7 @@ def test_sim_introspection_report_is_deterministic() -> None:
     report_b = build_introspection_report(Path(__file__).resolve().parents[1])
 
     assert report_a == report_b
-    assert all(hint.startswith("Document module src/research_utils/") for hint in report_a.doc_hints)
+    assert all(
+        hint.startswith("Document module src/research_utils/")
+        for hint in report_a.doc_hints
+    )

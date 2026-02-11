@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Protocol
+
+from research_utils.ml.strategies.base import OptimizerStrategy
+from research_utils.shared import EvalResult, OptimizationHistory
 
 
 @dataclass(frozen=True)
@@ -16,21 +18,19 @@ class ParameterSpace:
         return tuple(values[name] for name in self.names)
 
 
-class OptimizerStrategy(Protocol):
-    """Shared ask/tell strategy interface."""
-
-    def ask(self) -> dict[str, float]:
-        """Request the next candidate point."""
-
-    def tell(self, result: float) -> None:
-        """Report objective feedback."""
-
-
 @dataclass
 class OptimizationRunner:
     """Minimal optimization runner with deterministic history."""
 
-    history: list[float] = field(default_factory=list)
+    history: list[EvalResult] = field(default_factory=list)
 
-    def record(self, objective: float) -> None:
-        self.history.append(objective)
+    def record(self, result: EvalResult) -> None:
+        self.history.append(result)
+
+    @property
+    def result(self) -> OptimizationHistory:
+        best = min(self.history, key=lambda item: item.objective) if self.history else None
+        return OptimizationHistory(evaluations=tuple(self.history), best=best)
+
+
+__all__ = ["OptimizationRunner", "OptimizerStrategy", "ParameterSpace"]

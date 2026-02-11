@@ -8,8 +8,8 @@ version = "0.0.0"
 description = "Shared research infrastructure for deterministic experimentation"
 readme = "README.md"
 requires-python = ">=3.11"
-authors = [ 
-{name = "Ryaan Lari", email = "lari2@illinois.edu"}
+authors = [
+  {name = "Ryaan Lari", email = "lari2@illinois.edu"}
 ]
 dependencies = []
 

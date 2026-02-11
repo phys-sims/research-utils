@@ -1,0 +1,33 @@
+#!/usr/bin/env python3
+# timestamp: 2026-01-02T03:04:05Z
+# seed_policy: explicit-seed-required
+# config_hash: 1c0f4eecfa12f4d805138a7570b54edb0179c3745bd3f9d3a5563fc914724a5f
+# provenance: {"generator": "research_utils.agents.experiment_gen", "git_commit": "deadbeef", "package_version": "0.0.0"}
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+from some_pkg.adapter import run
+
+PARAMETER_PATHS = (
+    "physics.alpha",
+    "physics.beta",
+)
+
+BASE_CONFIG = {
+  "physics": {
+    "alpha": 1.5,
+    "beta": 2.0
+  }
+}
+
+def main(*, seed: int) -> None:
+    result = run(config=BASE_CONFIG, seed=seed)
+    destination = Path("results") / "result.json"
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(json.dumps(result, sort_keys=True), encoding="utf-8")
+
+if __name__ == "__main__":
+    main(seed=0)

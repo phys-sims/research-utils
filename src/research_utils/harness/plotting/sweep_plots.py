@@ -4,7 +4,11 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from research_utils.harness.plotting.common import create_figure, finalize_figure, require_matplotlib
+from research_utils.harness.plotting.common import (
+    create_figure,
+    finalize_figure,
+    require_matplotlib,
+)
 from research_utils.shared import SweepResult
 
 

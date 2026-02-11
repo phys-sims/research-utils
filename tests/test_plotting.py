@@ -16,8 +16,7 @@ from research_utils.harness.plotting import (
 from research_utils.shared import EvalResult, OptimizationHistory, SweepResult
 
 
-@pytest.fixture
-def _matplotlib_agg_backend() -> None:
+def _configure_agg_backend() -> None:
     matplotlib = pytest.importorskip("matplotlib")
     matplotlib.use("Agg", force=True)
     assert "agg" in matplotlib.get_backend().lower()
@@ -58,9 +57,8 @@ def _make_sweep_result() -> SweepResult:
     return SweepResult(evaluations=evaluations, seed=7, parameter_space=("alpha", "beta"))
 
 
-def test_sweep_plot_helpers_create_output_files(
-    tmp_path: Path, _matplotlib_agg_backend: None
-) -> None:
+def test_sweep_plot_helpers_create_output_files(tmp_path: Path) -> None:
+    _configure_agg_backend()
     sweep = _make_sweep_result()
 
     one_d_path = plot_objective_slice_1d(
@@ -86,9 +84,8 @@ def test_sweep_plot_helpers_create_output_files(
         assert output.stat().st_size > 0
 
 
-def test_optimization_convergence_plot_creates_output_file(
-    tmp_path: Path, _matplotlib_agg_backend: None
-) -> None:
+def test_optimization_convergence_plot_creates_output_file(tmp_path: Path) -> None:
+    _configure_agg_backend()
     sweep = _make_sweep_result()
     history = OptimizationHistory(evaluations=sweep.evaluations, best=sweep.evaluations[-1], seed=9)
 

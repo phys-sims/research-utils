@@ -248,7 +248,7 @@ Use real dates. Do not guess.
 python -m pre_commit run -a
 
 - **Type checking**
-python -m mypy src
+python -m mypy src tests
 
 - **Tests**
 pytest -q -m "not slow"

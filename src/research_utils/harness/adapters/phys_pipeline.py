@@ -15,4 +15,8 @@ class PhysPipelineAdapter:
 
     def run(self, config: dict[str, Any], seed: int) -> EvalResult:
         _ = phys_pipeline
-        return EvalResult(theta={k: float(v) for k, v in config.items() if isinstance(v, (int, float))}, objective=0.0, seed=seed)
+        return EvalResult(
+            theta={k: float(v) for k, v in config.items() if isinstance(v, (int, float))},
+            objective=0.0,
+            seed=seed,
+        )

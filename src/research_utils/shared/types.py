@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import asdict, dataclass, field
-from datetime import datetime, timezone
-from typing import Any, Mapping
+from datetime import UTC, datetime
+from typing import Any
 
 Numeric = float
 Theta = dict[str, Numeric]
@@ -27,7 +28,7 @@ class EvalResult:
     artifacts: dict[str, Any] = field(default_factory=dict)
     seed: int = 0
     config_hash: str = ""
-    timestamp: datetime = field(default_factory=lambda: datetime.now(tz=timezone.utc))
+    timestamp: datetime = field(default_factory=lambda: datetime.now(tz=UTC))
     provenance: dict[str, str] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -37,7 +38,7 @@ class EvalResult:
         return payload
 
     @classmethod
-    def from_dict(cls, payload: Mapping[str, Any]) -> "EvalResult":
+    def from_dict(cls, payload: Mapping[str, Any]) -> EvalResult:
         """Deserialize from ``to_dict`` output."""
         return cls(
             theta=dict(payload["theta"]),
@@ -71,7 +72,7 @@ class SweepResult:
         }
 
     @classmethod
-    def from_dict(cls, payload: Mapping[str, Any]) -> "SweepResult":
+    def from_dict(cls, payload: Mapping[str, Any]) -> SweepResult:
         return cls(
             evaluations=tuple(EvalResult.from_dict(item) for item in payload["evaluations"]),
             seed=int(payload["seed"]),
@@ -103,7 +104,7 @@ class OptimizationHistory:
         }
 
     @classmethod
-    def from_dict(cls, payload: Mapping[str, Any]) -> "OptimizationHistory":
+    def from_dict(cls, payload: Mapping[str, Any]) -> OptimizationHistory:
         best_payload = payload.get("best")
         return cls(
             evaluations=tuple(EvalResult.from_dict(item) for item in payload["evaluations"]),

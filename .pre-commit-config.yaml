@@ -1,5 +1,5 @@
-default_stages: [commit]
-files: ^(src|phys_pipeline|tests|docs|examples|\.github/|)/
+default_stages: [pre-commit]
+files: ^(src/|tests/|docs/|examples/|\.github/|pyproject\.toml$|\.pre-commit-config\.yaml$)
 exclude: >
   (^artifacts/|^htmlcov/|^build/|^dist/|
    ^\.venv/|^venv/|^\.mypy_cache/|^\.ruff_cache/|^\.pytest_cache/|^__pycache__/)
@@ -28,21 +28,14 @@ repos:
       - id: ruff
         args: ["--fix", "--exit-non-zero-on-fix"]
         types: [python]
-      - id: ruff-format
-        types: [python]
 
-  # --- Formatting (Black) ---
-  - repo: https://github.com/psf/black
-    rev: 25.9.0
-    hooks:
-      - id: black
 
-  # --- Modernize syntax to your Python (py311+) ---
+  # --- Modernize syntax to your Python (py310+) ---
   - repo: https://github.com/asottile/pyupgrade
     rev: v3.20.0
     hooks:
       - id: pyupgrade
-        args: ["--py311-plus"]
+        args: ["--py310-plus"]
 
   # --- Type checking (mypy) ---
   - repo: https://github.com/pre-commit/mirrors-mypy

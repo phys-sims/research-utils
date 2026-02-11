@@ -27,6 +27,12 @@ agent = [
 all = [
   "research-utils[harness,ml,agent]",
 ]
+dev = [
+  "pre-commit",
+  "pytest",
+  "mypy",
+  ...
+] 
 
 [tool.setuptools]
 package-dir = {"" = "src"}

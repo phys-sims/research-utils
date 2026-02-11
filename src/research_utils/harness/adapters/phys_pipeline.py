@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import inspect
 from collections.abc import Callable, Mapping
 from importlib import import_module
 from typing import Any, Protocol, cast
@@ -63,14 +64,13 @@ class PhysPipelineAdapter:
         if _is_pipeline_instance(candidate):
             return cast(_PipelineProtocol, candidate)
 
-        factory = cast(PipelineFactory, candidate)
-        try:
-            return factory(seed=seed)
-        except TypeError:
-            try:
-                return factory(seed)
-            except TypeError:
-                return factory()
+        pipeline = _call_with_optional_seed(cast(PipelineFactory, candidate), seed)
+        if not _is_pipeline_instance(pipeline):
+            msg = (
+                "Pipeline factory must return an instance exposing 'run' or 'evaluate'."
+            )
+            raise TypeError(msg)
+        return cast(_PipelineProtocol, pipeline)
 
     def _run_pipeline(
         self,
@@ -83,11 +83,7 @@ class PhysPipelineAdapter:
             method = getattr(pipeline, method_name, None)
             if method is None:
                 continue
-            try:
-                output = method(config=config, seed=seed)
-            except TypeError:
-                output = method(config, seed)
-
+            output = _call_with_config_and_seed(method, config=config, seed=seed)
             if not isinstance(output, Mapping):
                 msg = (
                     "Pipeline methods must return a mapping of objective/metrics, "
@@ -112,13 +108,11 @@ def _default_pipeline(*, seed: int) -> _PipelineProtocol:
         msg = "phys-pipeline module is missing required 'Pipeline' entrypoint."
         raise RuntimeError(msg)
 
-    try:
-        return cast(_PipelineProtocol, factory(seed=seed))
-    except TypeError:
-        try:
-            return cast(_PipelineProtocol, factory(seed))
-        except TypeError:
-            return cast(_PipelineProtocol, factory())
+    pipeline = _call_with_optional_seed(cast(PipelineFactory, factory), seed)
+    if not _is_pipeline_instance(pipeline):
+        msg = "phys-pipeline 'Pipeline' entrypoint returned an invalid pipeline object."
+        raise TypeError(msg)
+    return cast(_PipelineProtocol, pipeline)
 
 
 def _import_phys_pipeline() -> Any:
@@ -139,6 +133,72 @@ def _numeric_theta(config: Mapping[str, Any]) -> dict[str, float]:
         for key, value in config.items()
         if isinstance(value, (int, float)) and not isinstance(value, bool)
     }
+
+
+def _call_with_optional_seed(function: Callable[..., Any], seed: int) -> Any:
+    if _supports_kwargs(function, ("seed",)):
+        return function(seed=seed)
+    if _supports_positional(function, 1):
+        return function(seed)
+    return function()
+
+
+def _call_with_config_and_seed(
+    function: Callable[..., Any], *, config: Mapping[str, Any], seed: int
+) -> Any:
+    if _supports_kwargs(function, ("config", "seed")):
+        return function(config=config, seed=seed)
+    if _supports_positional(function, 2):
+        return function(config, seed)
+    msg = "Pipeline method must accept config and seed parameters."
+    raise TypeError(msg)
+
+
+def _supports_kwargs(function: Callable[..., Any], keys: tuple[str, ...]) -> bool:
+    try:
+        signature = inspect.signature(function)
+    except (TypeError, ValueError):
+        return False
+
+    parameters = signature.parameters
+    if any(param.kind == inspect.Parameter.VAR_KEYWORD for param in parameters.values()):
+        return True
+
+    return all(
+        key in parameters
+        and parameters[key].kind
+        in (inspect.Parameter.POSITIONAL_OR_KEYWORD, inspect.Parameter.KEYWORD_ONLY)
+        for key in keys
+    )
+
+
+def _supports_positional(function: Callable[..., Any], expected_count: int) -> bool:
+    try:
+        signature = inspect.signature(function)
+    except (TypeError, ValueError):
+        return True
+
+    params = list(signature.parameters.values())
+    required_positional = [
+        param
+        for param in params
+        if param.kind
+        in (inspect.Parameter.POSITIONAL_ONLY, inspect.Parameter.POSITIONAL_OR_KEYWORD)
+        and param.default is inspect.Parameter.empty
+    ]
+    if len(required_positional) > expected_count:
+        return False
+
+    positional_capacity = sum(
+        1
+        for param in params
+        if param.kind
+        in (inspect.Parameter.POSITIONAL_ONLY, inspect.Parameter.POSITIONAL_OR_KEYWORD)
+    )
+    if any(param.kind == inspect.Parameter.VAR_POSITIONAL for param in params):
+        return True
+
+    return positional_capacity >= expected_count
 
 
 __all__ = ["MetricExtractor", "PhysPipelineAdapter"]

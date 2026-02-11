@@ -16,7 +16,7 @@
 | Check | Command | Status | Last run | Notes |
 | --- | --- | --- | --- | --- |
 | Pre-commit (lint/format) | `python -m pre_commit run -a` | ✅ | 2026-02-11 | Passed locally after adapter/docs/test updates. |
-| Type checking (mypy) | `python -m mypy src` | ✅ | 2026-02-11 | Strict mode passes. |
+| Type checking (mypy) | `python -m mypy src tests` | ✅ | 2026-02-11 | Strict mode passes. |
 | Pytest fast | `python -m pytest -q -m "not slow" --durations=10` | ✅ | 2026-02-11 | Includes phys-pipeline adapter contract tests with a dummy pipeline stub. |
 | Pytest slow | `python -m pytest -q -m slow --durations=10` | ⬜ | YYYY-MM-DD |  |
 

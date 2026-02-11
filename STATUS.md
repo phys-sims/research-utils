@@ -15,9 +15,9 @@
 
 | Check | Command | Status | Last run | Notes |
 | --- | --- | --- | --- | --- |
-| Pre-commit (lint/format) | `python -m pre_commit run -a` | ⬜ | YYYY-MM-DD |  |
-| Type checking (mypy) | `python -m mypy src` | ⬜ | YYYY-MM-DD |  |
-| Pytest fast | `python -m pytest -q -m "not slow" --durations=10` | ⬜ | YYYY-MM-DD |  |
+| Pre-commit (lint/format) | `python -m pre_commit run -a` | ✅ | 2026-02-11 | Passed locally after adapter/docs/test updates. |
+| Type checking (mypy) | `python -m mypy src` | ✅ | 2026-02-11 | Strict mode passes. |
+| Pytest fast | `python -m pytest -q -m "not slow" --durations=10` | ✅ | 2026-02-11 | Includes phys-pipeline adapter contract tests with a dummy pipeline stub. |
 | Pytest slow | `python -m pytest -q -m slow --durations=10` | ⬜ | YYYY-MM-DD |  |
 
 Rules:
@@ -69,11 +69,11 @@ Any breaking change to these requires:
 
 | Item | Status | Notes |
 | --- | --- | --- |
-| Adapter exists (`harness.adapters.phys_pipeline`) | ⬜ |  |
-| Optional dependency only | ⬜ | Must not be hard-required |
-| Deterministic seeding verified | ⬜ | Tests exist |
-| Metric extraction tested | ⬜ | Dummy pipeline OK |
-| No sim-specific assumptions leaked | ⬜ | Verified |
+| Adapter exists (`harness.adapters.phys_pipeline`) | ✅ | `PhysPipelineAdapter` accepts pipeline instance or factory. |
+| Optional dependency only | ✅ | `phys-pipeline` import is lazy and only required for default pipeline construction. |
+| Deterministic seeding verified | ✅ | Tested with seed-stable dummy pipeline behavior. |
+| Metric extraction tested | ✅ | Objective and extra metrics are validated through extractor callbacks. |
+| No sim-specific assumptions leaked | ✅ | Adapter only maps config/output to canonical `EvalResult`. |
 
 ---
 

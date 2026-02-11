@@ -20,6 +20,8 @@ harness = [
 ]
 ml = [
   "numpy>=1.26",
+  "scipy>=1.11",
+  "cma>=3.3",
 ]
 agent = [
   "pydantic>=2.7",
@@ -27,6 +29,8 @@ agent = [
 all = [
   "matplotlib>=3.8",
   "numpy>=1.26",
+  "scipy>=1.11",
+  "cma>=3.3",
   "pydantic>=2.7",
 ]
 dev = [

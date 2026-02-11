@@ -109,10 +109,10 @@ Any breaking change to these requires:
 
 | Tool | Status | Notes |
 | --- | --- | --- |
-| Experiment script generator | ⬜ | Deterministic output |
-| Repo structure validator | ⬜ | Seeds, hashes, metadata |
-| Simulation introspection | ⬜ | No physics logic |
-| Golden-file tests | ⬜ | Required for generators |
+| Experiment script generator | ✅ | Deterministic generation to `experiments/` with metadata headers (timestamp, seed policy, config hash, provenance). |
+| Repo structure validator | ✅ | Checks for missing seed policy/seed argument, missing config hash/provenance metadata, and invalid parameter paths. |
+| Simulation introspection | ✅ | Deterministic project introspection emits documentation and test-coverage hints without physics assumptions. |
+| Golden-file tests | ✅ | Added golden-file coverage for generated script output format stability. |
 
 Agents must produce **artifacts**, not side effects.
 

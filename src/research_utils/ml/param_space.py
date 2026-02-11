@@ -18,13 +18,16 @@ class ParameterTransform(Protocol):
         """Transform an optimizer-space value into config-space."""
 
 
+TransformTuple = tuple[Callable[[float], float], Callable[[float], float]]
+
+
 @dataclass(frozen=True)
 class Parameter:
     """Parameter descriptor with optional path and transform."""
 
     name: str
     bounds: tuple[float, float]
-    transform: ParameterTransform | tuple[Callable[[float], float], Callable[[float], float]] | None = None
+    transform: ParameterTransform | TransformTuple | None = None
     path: str | None = None
 
     def __post_init__(self) -> None:

@@ -2,10 +2,8 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 import math
-
-import pytest
+from dataclasses import dataclass, field
 
 from research_utils.ml import Parameter, ParameterSpace
 
@@ -56,37 +54,42 @@ def test_parameter_space_round_trip_with_transform_is_deterministic() -> None:
 def test_bounds_validation_for_encode_and_decode() -> None:
     parameter_space = ParameterSpace(parameters=(Parameter("alpha", bounds=(0.0, 1.0)),))
 
-    with pytest.raises(ValueError, match="out of bounds"):
+    try:
         parameter_space.encode({"alpha": 2.0})
+        raise AssertionError("Expected encode to fail for out-of-bounds value")
+    except ValueError as exc:
+        assert "out of bounds" in str(exc)
 
-    with pytest.raises(ValueError, match="out of bounds"):
+    try:
         parameter_space.decode((2.0,))
+        raise AssertionError("Expected decode to fail for out-of-bounds value")
+    except ValueError as exc:
+        assert "out of bounds" in str(exc)
 
 
-@pytest.mark.parametrize(
-    ("base", "path", "expected"),
-    [
+def test_nested_path_assignment_correctness() -> None:
+    cases: list[tuple[object, str, object]] = [
         ({"a": {"b": 1.0}}, "a.b", {"a": {"b": 2.0}}),
         (OuterConfig(), "inner.alpha", 2.0),
         (ContainerLike(), "model.value", 2.0),
-    ],
-)
-def test_nested_path_assignment_correctness(base: object, path: str, expected: object) -> None:
-    parameter_space = ParameterSpace(
-        parameters=(Parameter(name="alpha", bounds=(0.0, 3.0), path=path),)
-    )
+    ]
 
-    updated = parameter_space.decode((2.0,), base=base)
+    for base, path, expected in cases:
+        parameter_space = ParameterSpace(
+            parameters=(Parameter(name="alpha", bounds=(0.0, 3.0), path=path),)
+        )
 
-    if isinstance(base, dict):
-        assert updated == expected
-        assert base == {"a": {"b": 1.0}}
-    elif isinstance(base, OuterConfig):
-        assert isinstance(updated, OuterConfig)
-        assert updated.inner.alpha == expected
-        assert base.inner.alpha == 0.0
-    else:
-        assert isinstance(updated, ContainerLike)
-        assert isinstance(base, ContainerLike)
-        assert updated.model.value == expected
-        assert base.model.value == 0.0
+        updated = parameter_space.decode((2.0,), base=base)
+
+        if isinstance(base, dict):
+            assert updated == expected
+            assert base == {"a": {"b": 1.0}}
+        elif isinstance(base, OuterConfig):
+            assert isinstance(updated, OuterConfig)
+            assert updated.inner.alpha == expected
+            assert base.inner.alpha == 0.0
+        else:
+            assert isinstance(updated, ContainerLike)
+            assert isinstance(base, ContainerLike)
+            assert updated.model.value == expected
+            assert base.model.value == 0.0

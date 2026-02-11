@@ -2,6 +2,14 @@
 
 from dataclasses import dataclass
 
+from research_utils.shared.types import (
+    Candidate,
+    EvalResult,
+    OptimizationHistory,
+    SweepResult,
+    Theta,
+)
+
 
 @dataclass(frozen=True)
 class Seed:
@@ -10,4 +18,11 @@ class Seed:
     value: int
 
 
-__all__ = ["Seed"]
+__all__ = [
+    "Candidate",
+    "EvalResult",
+    "OptimizationHistory",
+    "Seed",
+    "SweepResult",
+    "Theta",
+]

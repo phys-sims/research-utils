@@ -1,13 +1,5 @@
 """Plotting helpers for harness outputs."""
 
-from dataclasses import dataclass
-
-
-@dataclass(frozen=True)
-class ReportSpec:
-    """Placeholder plotting/reporting spec."""
-
-    title: str = "report"
-
+from research_utils.harness.core import ReportSpec
 
 __all__ = ["ReportSpec"]

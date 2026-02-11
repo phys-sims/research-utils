@@ -15,9 +15,9 @@
 
 | Check | Command | Status | Last run | Notes |
 | --- | --- | --- | --- | --- |
-| Pre-commit (lint/format) | `python -m pre_commit run -a` | ✅ | 2026-02-11 | Passed locally after ML parameter-space/evaluator and test updates. |
+| Pre-commit (lint/format) | `python -m pre_commit run -a` | ✅ | 2026-02-11 | Passed locally after adding optimization runner/strategies/logging and tests. |
 | Type checking (mypy) | `python -m mypy src tests` | ✅ | 2026-02-11 | Strict mode passes. |
-| Pytest fast | `python -m pytest -q -m "not slow" --durations=10` | ✅ | 2026-02-11 | Includes parameter-space round-trip/bounds/path tests and simulation evaluator coverage. |
+| Pytest fast | `python -m pytest -q -m "not slow" --durations=10` | ✅ | 2026-02-11 | Includes optimization runner logging/penalty tests plus parameter-space and evaluator coverage. |
 | Pytest slow | `python -m pytest -q -m slow --durations=10` | ⬜ | YYYY-MM-DD |  |
 
 Rules:
@@ -51,10 +51,10 @@ Record the **current authoritative shapes**.
 | --- | --- | --- |
 | `EvalResult` | ⬜ | Defined / tested / stable? |
 | `SweepResult` | ⬜ | Serialization format decided? |
-| `OptimizationHistory` | ⬜ | Best-so-far semantics locked? |
+| `OptimizationHistory` | ✅ | Best-so-far semantics now exercised through OptimizationRunner tests (including penalty and batching paths). |
 | `Parameter` | ✅ | Bounds + transform behavior validated via new contract tests. |
 | `ParameterSpace` | ✅ | Deterministic encode/decode with nested path assignment and side-effect-safe decode tested. |
-| `OptimizerStrategy` | ⬜ | ask/tell semantics finalized? |
+| `OptimizerStrategy` | ✅ | ask/tell flow validated via RandomStrategy + OptimizationRunner integration tests. |
 
 Any breaking change to these requires:
 - ADR
@@ -96,12 +96,12 @@ Any breaking change to these requires:
 | Feature | Status | Notes |
 | --- | --- | --- |
 | `SimulationEvaluator` | ✅ | Adapter-backed evaluator now returns objective and metrics deterministically. |
-| `RandomStrategy` | ⬜ | Baseline |
-| `SobolStrategy` | ⬜ | Optional dependency |
+| `RandomStrategy` | ✅ | Always-available deterministic uniform sampling strategy implemented and tested for seed reproducibility. |
+| `SobolStrategy` | ✅ | Implemented behind SciPy import guard; raises a clear runtime error when SciPy is unavailable. |
 | `CMAESStrategy` | ⬜ | Optional dependency |
 | Constraint handling | ⬜ | Penalties / feasibility |
 | Strategy composition | ⬜ | Pipeline / portfolio |
-| Deterministic logging | ⬜ | Best-so-far tracked |
+| Deterministic logging | ✅ | JSONL/CSV logger with run metadata and best-so-far snapshots integrated with OptimizationRunner. |
 
 ---
 

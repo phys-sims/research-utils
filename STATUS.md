@@ -15,9 +15,9 @@
 
 | Check | Command | Status | Last run | Notes |
 | --- | --- | --- | --- | --- |
-| Pre-commit (lint/format) | `python -m pre_commit run -a` | ✅ | 2026-02-11 | Passed locally after adapter/docs/test updates. |
+| Pre-commit (lint/format) | `python -m pre_commit run -a` | ✅ | 2026-02-11 | Passed locally after ML parameter-space/evaluator and test updates. |
 | Type checking (mypy) | `python -m mypy src tests` | ✅ | 2026-02-11 | Strict mode passes. |
-| Pytest fast | `python -m pytest -q -m "not slow" --durations=10` | ✅ | 2026-02-11 | Includes phys-pipeline adapter contract tests with a dummy pipeline stub. |
+| Pytest fast | `python -m pytest -q -m "not slow" --durations=10` | ✅ | 2026-02-11 | Includes parameter-space round-trip/bounds/path tests and simulation evaluator coverage. |
 | Pytest slow | `python -m pytest -q -m slow --durations=10` | ⬜ | YYYY-MM-DD |  |
 
 Rules:
@@ -52,8 +52,8 @@ Record the **current authoritative shapes**.
 | `EvalResult` | ⬜ | Defined / tested / stable? |
 | `SweepResult` | ⬜ | Serialization format decided? |
 | `OptimizationHistory` | ⬜ | Best-so-far semantics locked? |
-| `Parameter` | ⬜ | Transform + bounds behavior validated? |
-| `ParameterSpace` | ⬜ | Encode/decode round-trip tests present? |
+| `Parameter` | ✅ | Bounds + transform behavior validated via new contract tests. |
+| `ParameterSpace` | ✅ | Deterministic encode/decode with nested path assignment and side-effect-safe decode tested. |
 | `OptimizerStrategy` | ⬜ | ask/tell semantics finalized? |
 
 Any breaking change to these requires:
@@ -95,7 +95,7 @@ Any breaking change to these requires:
 
 | Feature | Status | Notes |
 | --- | --- | --- |
-| `SimulationEvaluator` | ⬜ | Adapter-based |
+| `SimulationEvaluator` | ✅ | Adapter-backed evaluator now returns objective and metrics deterministically. |
 | `RandomStrategy` | ⬜ | Baseline |
 | `SobolStrategy` | ⬜ | Optional dependency |
 | `CMAESStrategy` | ⬜ | Optional dependency |

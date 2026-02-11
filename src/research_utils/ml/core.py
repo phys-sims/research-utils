@@ -4,18 +4,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+from research_utils.ml.param_space import ParameterSpace
 from research_utils.ml.strategies.base import OptimizerStrategy
 from research_utils.shared import EvalResult, OptimizationHistory
-
-
-@dataclass(frozen=True)
-class ParameterSpace:
-    """Minimal stable parameter-space contract."""
-
-    names: tuple[str, ...] = ()
-
-    def encode(self, values: dict[str, float]) -> tuple[float, ...]:
-        return tuple(values[name] for name in self.names)
 
 
 @dataclass

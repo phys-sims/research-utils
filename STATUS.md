@@ -31,7 +31,7 @@ Rules:
 
 | Suite | Definition | Typical runtime | Slowest tests (top 3) | Last measured | Notes |
 | --- | --- | --- | --- | --- | --- |
-| Fast | `-m "not slow" --durations=10` | TBD | TBD | YYYY-MM-DD |  |
+| Fast | `-m "not slow" --durations=10` | TBD | TBD | 2026-02-11 | Includes plotting helper tests for non-interactive backend configuration and output artifact generation (skipped when matplotlib is unavailable). |
 | Slow | `-m slow --durations=10` | TBD | TBD | YYYY-MM-DD |  |
 | Full | `-m "slow or not slow" --durations=10` | TBD | TBD | YYYY-MM-DD |  |
 
@@ -87,7 +87,7 @@ Any breaking change to these requires:
 | `MetricSpec` | ⬜ | Error metrics defined |
 | Deterministic sweep ordering | ⬜ | Same seed ⇒ same order |
 | Result persistence (CSV/Parquet) | ⬜ | Format decision documented |
-| Canonical plots available | ⬜ | 1D, 2D, convergence |
+| Canonical plots available | ✅ | Added canonical sweep plotting helpers (1D objective slice, 2D objective heatmap, metric-vs-metric scatter) and optimization convergence plotting over canonical result contracts. |
 
 ---
 

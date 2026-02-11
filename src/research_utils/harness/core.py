@@ -1,27 +1,20 @@
-"""Core harness contracts."""
+"""Core harness contracts and deterministic sweep execution."""
 
 from __future__ import annotations
 
+import hashlib
+import json
 from dataclasses import dataclass, field
-from typing import Protocol
+from typing import Any, Protocol
 
-from research_utils.shared import EvalResult
-
-
-@dataclass(frozen=True)
-class SweepSpec:
-    """Deterministic sweep configuration for multiple evaluations."""
-
-    candidates: tuple[dict[str, float], ...]
-    seed: int
-
-
-@dataclass(frozen=True)
-class MetricSpec:
-    """Metric declaration consumed by harness reporting."""
-
-    name: str
-    goal: str = "min"
+from research_utils.harness.adapters import Adapter
+from research_utils.harness.metrics import (
+    MetricSpec,
+    aggregate_metrics,
+    compute_metrics,
+)
+from research_utils.harness.sweep import SweepSpec
+from research_utils.shared import EvalResult, SweepResult
 
 
 @dataclass(frozen=True)
@@ -39,26 +32,109 @@ class TestHarness(Protocol):
 
     name: str
 
-    def run_sweep(self, spec: SweepSpec, metrics: tuple[MetricSpec, ...] = ()) -> list[EvalResult]:
-        """Run a deterministic sweep and return canonical eval records."""
+    def run_sweep(
+        self,
+        adapter: Adapter,
+        base_config: dict[str, Any],
+        sweep_spec: SweepSpec,
+        metric_spec: tuple[MetricSpec, ...],
+        seed: int | None,
+    ) -> SweepResult:
+        """Run a deterministic sweep and return canonical results."""
 
 
 @dataclass
 class InMemoryTestHarness:
-    """Minimal harness implementation for tests and examples."""
+    """Minimal deterministic harness implementation for tests and examples."""
 
     name: str = "default"
+    allow_unseeded: bool = False
     _results: list[EvalResult] = field(default_factory=list)
 
-    def run_sweep(self, spec: SweepSpec, metrics: tuple[MetricSpec, ...] = ()) -> list[EvalResult]:
-        _ = metrics
-        self._results = [
-            EvalResult(
-                theta=dict(candidate),
-                objective=0.0,
-                seed=spec.seed,
-                config_hash="",
+    def run_sweep(
+        self,
+        adapter: Adapter,
+        base_config: dict[str, Any],
+        sweep_spec: SweepSpec,
+        metric_spec: tuple[MetricSpec, ...] = (),
+        seed: int | None = None,
+    ) -> SweepResult:
+        run_seed = _resolve_seed(seed, allow_unseeded=self.allow_unseeded)
+        points = sweep_spec.sample(seed=run_seed)
+        base_hash = _hash_payload(base_config)
+
+        evaluations: list[EvalResult] = []
+        for index, point in enumerate(points):
+            config = dict(base_config)
+            config.update(point)
+            eval_seed = _derive_seed(run_seed, index)
+            result = adapter.run(config=config, seed=eval_seed)
+
+            metrics = dict(result.metrics)
+            metrics.update(compute_metrics(result, metric_spec))
+
+            provenance = dict(result.provenance)
+            provenance.update(
+                {
+                    "harness": self.name,
+                    "sampling_mode": sweep_spec.mode,
+                    "sweep_index": str(index),
+                }
             )
-            for candidate in spec.candidates
-        ]
-        return list(self._results)
+
+            evaluations.append(
+                EvalResult(
+                    theta=dict(point),
+                    objective=float(result.objective),
+                    metrics=metrics,
+                    artifacts=dict(result.artifacts),
+                    seed=eval_seed,
+                    config_hash=base_hash,
+                    timestamp=result.timestamp,
+                    provenance=provenance,
+                )
+            )
+
+        self._results = evaluations
+        evaluation_tuple = tuple(evaluations)
+        aggregate = aggregate_metrics(evaluation_tuple, metric_spec)
+        parameter_space = tuple(sorted(sweep_spec.parameters.keys()))
+        sweep_provenance = {
+            "harness": self.name,
+            "sampling_mode": sweep_spec.mode,
+            "metric_aggregate": json.dumps(aggregate, sort_keys=True),
+        }
+
+        return SweepResult(
+            evaluations=evaluation_tuple,
+            seed=run_seed,
+            parameter_space=parameter_space,
+            config_hash=base_hash,
+            provenance=sweep_provenance,
+        )
+
+
+def _resolve_seed(seed: int | None, *, allow_unseeded: bool) -> int:
+    if seed is None and not allow_unseeded:
+        msg = "seed is required unless allow_unseeded=True"
+        raise ValueError(msg)
+    return int(seed or 0)
+
+
+def _hash_payload(payload: dict[str, Any]) -> str:
+    encoded = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(encoded.encode("utf-8")).hexdigest()
+
+
+def _derive_seed(seed: int, index: int) -> int:
+    # Simple explicit derivation that keeps ordering deterministic.
+    return seed + index
+
+
+__all__ = [
+    "InMemoryTestHarness",
+    "MetricSpec",
+    "ReportSpec",
+    "SweepSpec",
+    "TestHarness",
+]

@@ -2,12 +2,34 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
-from research_utils.harness import InMemoryTestHarness, MetricSpec, ReportSpec, SweepSpec
+from research_utils.harness import (
+    InMemoryTestHarness,
+    MetricSpec,
+    ReportSpec,
+    SweepSpec,
+)
+from research_utils.harness.adapters import Adapter
 from research_utils.ml import OptimizationRunner
 from research_utils.ml.strategies import RandomSearchStrategy
-from research_utils.shared import Candidate, EvalResult, OptimizationHistory, SweepResult
+from research_utils.shared import (
+    Candidate,
+    EvalResult,
+    OptimizationHistory,
+    SweepResult,
+)
+
+
+class _DummyAdapter(Adapter):
+    def run(self, config: dict[str, float], seed: int) -> EvalResult:
+        value = float(config["alpha"])
+        return EvalResult(
+            theta={"alpha": value},
+            objective=value,
+            metrics={"rmse": value + seed},
+            seed=seed,
+        )
 
 
 def test_eval_result_round_trip_serialization() -> None:
@@ -18,7 +40,7 @@ def test_eval_result_round_trip_serialization() -> None:
         artifacts={"plot": "plot.png"},
         seed=7,
         config_hash="abc123",
-        timestamp=datetime(2025, 1, 1, tzinfo=timezone.utc),
+        timestamp=datetime(2025, 1, 1, tzinfo=timezone(timedelta(0))),
         provenance={"version": "0.0.0"},
     )
 
@@ -39,15 +61,21 @@ def test_collection_container_round_trip_serialization() -> None:
 
 def test_harness_specs_and_in_memory_harness() -> None:
     harness = InMemoryTestHarness(name="test")
-    spec = SweepSpec(candidates=({"alpha": 1.0}, {"alpha": 2.0}), seed=11)
+    spec = SweepSpec(parameters={"alpha": (1.0, 2.0)}, mode="grid")
     metric_specs = (MetricSpec(name="rmse", goal="min"),)
     report = ReportSpec(title="summary", include_metrics=("rmse",))
 
-    results = harness.run_sweep(spec=spec, metrics=metric_specs)
+    results = harness.run_sweep(
+        adapter=_DummyAdapter(),
+        base_config={},
+        sweep_spec=spec,
+        metric_spec=metric_specs,
+        seed=11,
+    )
 
     assert report.title == "summary"
-    assert [item.theta["alpha"] for item in results] == [1.0, 2.0]
-    assert all(item.seed == 11 for item in results)
+    assert [item.theta["alpha"] for item in results.evaluations] == [1.0, 2.0]
+    assert [item.seed for item in results.evaluations] == [11, 12]
 
 
 def test_optimizer_strategy_and_runner_consume_shared_types() -> None:

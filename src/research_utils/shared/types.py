@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import json
+from collections.abc import Mapping
 from dataclasses import asdict, dataclass, field
-from datetime import datetime, timezone
-from typing import Any, Mapping
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+from typing import Any
 
 Numeric = float
 Theta = dict[str, Numeric]
@@ -27,7 +30,9 @@ class EvalResult:
     artifacts: dict[str, Any] = field(default_factory=dict)
     seed: int = 0
     config_hash: str = ""
-    timestamp: datetime = field(default_factory=lambda: datetime.now(tz=timezone.utc))
+    timestamp: datetime = field(
+        default_factory=lambda: datetime.now(tz=timezone(timedelta(0)))
+    )
     provenance: dict[str, str] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -37,7 +42,7 @@ class EvalResult:
         return payload
 
     @classmethod
-    def from_dict(cls, payload: Mapping[str, Any]) -> "EvalResult":
+    def from_dict(cls, payload: Mapping[str, Any]) -> EvalResult:
         """Deserialize from ``to_dict`` output."""
         return cls(
             theta=dict(payload["theta"]),
@@ -71,14 +76,57 @@ class SweepResult:
         }
 
     @classmethod
-    def from_dict(cls, payload: Mapping[str, Any]) -> "SweepResult":
+    def from_dict(cls, payload: Mapping[str, Any]) -> SweepResult:
         return cls(
-            evaluations=tuple(EvalResult.from_dict(item) for item in payload["evaluations"]),
+            evaluations=tuple(
+                EvalResult.from_dict(item) for item in payload["evaluations"]
+            ),
             seed=int(payload["seed"]),
-            parameter_space=tuple(str(name) for name in payload.get("parameter_space", [])),
+            parameter_space=tuple(
+                str(name) for name in payload.get("parameter_space", [])
+            ),
             config_hash=str(payload.get("config_hash", "")),
             provenance=dict(payload.get("provenance", {})),
         )
+
+    def to_dataframe(self) -> Any:
+        """Convert evaluations into a canonical flat table."""
+        try:
+            import pandas as pd  # type: ignore[import-untyped]
+        except ImportError as exc:  # pragma: no cover - optional dependency path
+            msg = "to_dataframe requires pandas"
+            raise RuntimeError(msg) from exc
+
+        rows = [_evaluation_to_row(item) for item in self.evaluations]
+        return pd.DataFrame(rows)
+
+    def save(self, path: str | Path) -> Path:
+        """Persist sweep results as CSV by default and parquet when requested."""
+        destination = Path(path)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+
+        suffix = destination.suffix.lower()
+        if suffix == ".parquet":
+            frame = self.to_dataframe()
+            frame.to_parquet(destination, index=False)
+            return destination
+
+        if suffix == "":
+            destination = destination.with_suffix(".csv")
+
+        rows = [_evaluation_to_row(item) for item in self.evaluations]
+        if not rows:
+            destination.write_text("", encoding="utf-8")
+            return destination
+
+        import csv
+
+        fieldnames = sorted(rows[0].keys())
+        with destination.open("w", encoding="utf-8", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(rows)
+        return destination
 
 
 @dataclass(frozen=True)
@@ -103,16 +151,40 @@ class OptimizationHistory:
         }
 
     @classmethod
-    def from_dict(cls, payload: Mapping[str, Any]) -> "OptimizationHistory":
+    def from_dict(cls, payload: Mapping[str, Any]) -> OptimizationHistory:
         best_payload = payload.get("best")
         return cls(
-            evaluations=tuple(EvalResult.from_dict(item) for item in payload["evaluations"]),
-            best=EvalResult.from_dict(best_payload) if isinstance(best_payload, Mapping) else None,
+            evaluations=tuple(
+                EvalResult.from_dict(item) for item in payload["evaluations"]
+            ),
+            best=(
+                EvalResult.from_dict(best_payload)
+                if isinstance(best_payload, Mapping)
+                else None
+            ),
             seed=int(payload.get("seed", 0)),
-            parameter_space=tuple(str(name) for name in payload.get("parameter_space", [])),
+            parameter_space=tuple(
+                str(name) for name in payload.get("parameter_space", [])
+            ),
             config_hash=str(payload.get("config_hash", "")),
             provenance=dict(payload.get("provenance", {})),
         )
+
+
+def _evaluation_to_row(result: EvalResult) -> dict[str, Any]:
+    row: dict[str, Any] = {
+        "objective": result.objective,
+        "seed": result.seed,
+        "config_hash": result.config_hash,
+        "timestamp": result.timestamp.isoformat(),
+    }
+    for key in sorted(result.theta):
+        row[f"theta.{key}"] = result.theta[key]
+    for key in sorted(result.metrics):
+        row[f"metric.{key}"] = result.metrics[key]
+    row["artifacts"] = json.dumps(result.artifacts, sort_keys=True)
+    row["provenance"] = json.dumps(result.provenance, sort_keys=True)
+    return row
 
 
 __all__ = [

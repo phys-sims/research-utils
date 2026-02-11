@@ -2,22 +2,22 @@
 
 from __future__ import annotations
 
-import importlib.util
+from typing import TYPE_CHECKING
 
 import pytest
 
-from research_utils.ml import Parameter, ParameterSpace
 import research_utils.ml.strategies.cmaes as cmaes_module
+from research_utils.ml import Parameter, ParameterSpace
 from research_utils.ml.strategies.cmaes import CMAESStrategy
 from research_utils.shared import EvalResult
 
-requires_cma = pytest.mark.skipif(
-    importlib.util.find_spec("cma") is None,
-    reason="cma is not installed",
-)
+if TYPE_CHECKING:
+    from _pytest.monkeypatch import MonkeyPatch
 
 
-def test_cmaes_strategy_missing_dependency_error_is_actionable(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_cmaes_strategy_missing_dependency_error_is_actionable(
+    monkeypatch: MonkeyPatch,
+) -> None:
     monkeypatch.setattr(cmaes_module, "_cma", None)
     parameter_space = ParameterSpace(parameters=(Parameter("x", bounds=(0.0, 1.0)),))
 
@@ -27,8 +27,8 @@ def test_cmaes_strategy_missing_dependency_error_is_actionable(monkeypatch: pyte
     assert "research-utils[ml]" in str(exc_info.value)
 
 
-@requires_cma
 def test_cmaes_strategy_is_reproducible_for_same_seed() -> None:
+    pytest.importorskip("cma")
     parameter_space = ParameterSpace(
         parameters=(
             Parameter("x", bounds=(-1.0, 1.0)),
@@ -45,8 +45,8 @@ def test_cmaes_strategy_is_reproducible_for_same_seed() -> None:
     assert asked_a == asked_b
 
 
-@requires_cma
 def test_cmaes_strategy_enforces_bounds_on_asked_candidates() -> None:
+    pytest.importorskip("cma")
     parameter_space = ParameterSpace(
         parameters=(
             Parameter("x", bounds=(-2.0, -1.0)),
@@ -61,8 +61,8 @@ def test_cmaes_strategy_enforces_bounds_on_asked_candidates() -> None:
         assert 10.0 <= theta["y"] <= 11.0
 
 
-@requires_cma
 def test_cmaes_strategy_tell_updates_history_and_convergence() -> None:
+    pytest.importorskip("cma")
     parameter_space = ParameterSpace(parameters=(Parameter("x", bounds=(0.0, 1.0)),))
     strategy = CMAESStrategy(parameter_space=parameter_space, seed=9, max_iterations=3)
 

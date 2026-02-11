@@ -70,7 +70,10 @@ class CMAESStrategy(OptimizerStrategy):
         return Candidate(theta=theta)
 
     def tell(self, result: EvalResult) -> None:
-        encoded = [float(result.theta[parameter.name]) for parameter in self.parameter_space.parameters]
+        encoded = [
+            float(result.theta[parameter.name])
+            for parameter in self.parameter_space.parameters
+        ]
         self._optimizer.tell([encoded], [float(result.objective)])
         self._history.append(result)
 

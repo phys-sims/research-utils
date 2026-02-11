@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 
 from research_utils.harness import InMemoryTestHarness, MetricSpec, ReportSpec, SweepSpec
 from research_utils.ml import OptimizationRunner
@@ -18,7 +18,7 @@ def test_eval_result_round_trip_serialization() -> None:
         artifacts={"plot": "plot.png"},
         seed=7,
         config_hash="abc123",
-        timestamp=datetime(2025, 1, 1, tzinfo=UTC),
+        timestamp=datetime(2025, 1, 1, tzinfo=timezone.utc),
         provenance={"version": "0.0.0"},
     )
 

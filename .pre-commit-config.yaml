@@ -30,12 +30,12 @@ repos:
         types: [python]
 
 
-  # --- Modernize syntax to your Python (py311+) ---
+  # --- Modernize syntax to your Python (py310+) ---
   - repo: https://github.com/asottile/pyupgrade
     rev: v3.20.0
     hooks:
       - id: pyupgrade
-        args: ["--py311-plus"]
+        args: ["--py310-plus"]
 
   # --- Type checking (mypy) ---
   - repo: https://github.com/pre-commit/mirrors-mypy

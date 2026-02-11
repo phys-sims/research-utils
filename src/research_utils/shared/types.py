@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from dataclasses import asdict, dataclass, field
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from typing import Any
 
 Numeric = float
@@ -28,7 +28,7 @@ class EvalResult:
     artifacts: dict[str, Any] = field(default_factory=dict)
     seed: int = 0
     config_hash: str = ""
-    timestamp: datetime = field(default_factory=lambda: datetime.now(tz=UTC))
+    timestamp: datetime = field(default_factory=lambda: datetime.now(tz=timezone.utc))
     provenance: dict[str, str] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

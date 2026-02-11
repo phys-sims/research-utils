@@ -26,11 +26,10 @@ repos:
     rev: v0.14.0
     hooks:
       - id: ruff
-        args: ["--fix", "--exit-non-zero-on-fix"]   # fail if it changed files (so you re-add & commit)
+        args: ["--fix", "--exit-non-zero-on-fix"]
         types: [python]
-      - id: ruff-format                              # Black-compatible formatter
+      - id: ruff-format
         types: [python]
-
 
   # --- Formatting (Black) ---
   - repo: https://github.com/psf/black
@@ -50,8 +49,8 @@ repos:
     rev: v1.18.2
     hooks:
       - id: mypy
-        stages: [manual]
-        additional_dependencies: ["pydantic>=2.7", "matplotlib"]  # add stubs here if needed
+        args: ["--config-file=pyproject.toml"]
+        additional_dependencies: ["pydantic>=2.7", "matplotlib"]
 
   # --- Spell checking (codespell) ---
   - repo: https://github.com/codespell-project/codespell
@@ -59,3 +58,12 @@ repos:
     hooks:
       - id: codespell
 
+  # --- Fast tests ---
+  - repo: local
+    hooks:
+      - id: pytest-fast
+        name: pytest-fast
+        entry: pytest -q -m "not slow"
+        language: system
+        pass_filenames: false
+        types: [python]

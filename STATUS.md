@@ -15,9 +15,9 @@
 
 | Check | Command | Status | Last run | Notes |
 | --- | --- | --- | --- | --- |
-| Pre-commit (lint/format) | `python -m pre_commit run -a` | ✅ | 2026-02-11 | Passed locally after adding optimization runner/strategies/logging and tests. |
-| Type checking (mypy) | `python -m mypy src tests` | ✅ | 2026-02-11 | Strict mode passes. |
-| Pytest fast | `python -m pytest -q -m "not slow" --durations=10` | ✅ | 2026-02-11 | Includes optimization runner logging/penalty tests plus parameter-space and evaluator coverage. |
+| Pre-commit (lint/format) | `python -m pre_commit run -a` | ✅ | 2026-02-12 | Passed locally after adding composition strategies, reporting helpers, ADR updates, and tests. |
+| Type checking (mypy) | `python -m mypy src tests` | ✅ | 2026-02-12 | Strict mode passes including composition/reporting additions. |
+| Pytest fast | `python -m pytest -q -m "not slow" --durations=10` | ✅ | 2026-02-12 | Includes composition strategy tests and summary schema-lock coverage. |
 | Pytest slow | `python -m pytest -q -m slow --durations=10` | ⬜ | YYYY-MM-DD |  |
 
 Rules:
@@ -99,8 +99,8 @@ Any breaking change to these requires:
 | `RandomStrategy` | ✅ | Always-available deterministic uniform sampling strategy implemented and tested for seed reproducibility. |
 | `SobolStrategy` | ✅ | Implemented behind SciPy import guard; raises a clear runtime error when SciPy is unavailable. |
 | `CMAESStrategy` | ✅ | Implemented behind `cma` import guard with deterministic seeding and bound-constrained ask/tell behavior. |
-| Constraint handling | ⬜ | Penalties / feasibility |
-| Strategy composition | ⬜ | Pipeline / portfolio |
+| Constraint handling | ✅ | Deterministic penalty objective path is integrated in `OptimizationRunner` with tests locking failure-to-penalty conversion behavior. |
+| Strategy composition | ✅ | Added deterministic `StagedStrategy` and `PortfolioStrategy` under shared `OptimizerStrategy` ask/tell contract. |
 | Deterministic logging | ✅ | JSONL/CSV logger with run metadata and best-so-far snapshots integrated with OptimizationRunner. |
 
 ---
@@ -137,9 +137,9 @@ If determinism cannot be guaranteed, document and justify in an ADR.
 | --- | --- | --- |
 | Core contracts | ✅ | ADR 0001 documents canonical shared result contracts. |
 | Dependency boundaries | ✅ | ADR 0002 defines optional extras and adapter-scoped simulator dependencies. |
-| Determinism policy | ⬜ | Pending dedicated ADR to formalize RNG derivation policy. |
-| Result storage format | ⬜ | Pending dedicated ADR for CSV/parquet interoperability defaults. |
-| Optimization interfaces | ⬜ | Pending dedicated ADR for staged/portfolio strategy composition semantics. |
+| Determinism policy | ✅ | ADR 0003 formalizes explicit seed requirements and deterministic derivation policy. |
+| Result storage format | ✅ | ADR 0005 defines canonical deterministic run-summary JSON artifacts for sweep/optimization reporting helpers. |
+| Optimization interfaces | ✅ | ADR 0004 documents staged/portfolio composition semantics on top of shared ask/tell contracts. |
 | Agent responsibilities | ⬜ | Pending dedicated ADR for agent scope/guardrail enforcement details. |
 
 ---
@@ -163,10 +163,10 @@ Status: ✅ Complete (all checklist items green as of 2026-02-11).
 
 ### v0.2 — Optimization composition + agents
 - [ ] CMA-ES (optional)
-- [ ] Strategy composition
+- [x] Strategy composition
 - [ ] Agent experiment generators
 - [ ] Validation agents
-- [ ] Improved reporting
+- [x] Improved reporting
 
 ---
 
@@ -180,8 +180,8 @@ List concrete, reproducible issues only.
 ## Next actions
 Short, concrete, actionable items.
 
-- [ ] Deliver v0.2 Milestone 1 (ADR closure + roadmap/status reconciliation) from `docs/v0.2-action-plan.md`.
+- [x] Deliver v0.2 Milestone 1 (ADR closure + roadmap/status reconciliation) from `docs/v0.2-action-plan.md`.
 - [ ] Deliver v0.2 Milestone 2 (constraint handling v1) with deterministic penalty/feasibility tests.
-- [ ] Deliver v0.2 Milestone 3 (staged + portfolio composition) behind shared strategy contracts.
-- [ ] Deliver v0.2 Milestone 4 (canonical reporting improvements and artifact schema lock tests).
+- [x] Deliver v0.2 Milestone 3 (staged + portfolio composition) behind shared strategy contracts.
+- [x] Deliver v0.2 Milestone 4 (canonical reporting improvements and artifact schema lock tests).
 - [ ] Execute v0.2 release readiness checklist and version/release-note synchronization.

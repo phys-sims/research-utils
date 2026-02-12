@@ -1,53 +1,54 @@
 # How to add an optimizer strategy
 
-This guide documents the expected contract for optimizer strategies in
-`research_utils.ml.strategies`.
+This guide documents the optimizer contract used by `OptimizationRunner`.
 
-## Strategy contract
+## Strategy contract (required)
 
-Every strategy must implement the `OptimizerStrategy` protocol:
+Each strategy must implement the `OptimizerStrategy` protocol:
 
 - `ask() -> Candidate`
 - `tell(result: EvalResult) -> None`
 - `is_converged` property
 - `result` property (`OptimizationHistory`)
 
-Strategies must keep deterministic behavior for identical seeds and parameter spaces.
+The strategy must be deterministic for the same parameter space and seed.
 
-## Optional dependencies
+## Dependency policy
 
-If a strategy requires third-party packages:
+If a strategy depends on third-party packages:
 
-1. Guard imports in module scope and raise an actionable runtime error during strategy
-   construction (`__post_init__`).
-2. Mention the required install command in the error text.
-3. Add dependency to `pyproject.toml` extras and documentation.
-4. Add tests that skip gracefully if the optional dependency is unavailable.
+1. Keep the dependency optional (do not make it a core install dependency).
+2. Raise an actionable runtime error if the dependency is unavailable.
+3. Document the required extra in `pyproject.toml` and docs.
+4. Add tests for both available and unavailable dependency paths.
 
-## Example: `CMAESStrategy`
+## Runner integration pattern
 
-`CMAESStrategy` wraps the [`cma`](https://pypi.org/project/cma/) package.
+The end-to-end reference in `examples/dummy_end_to_end.py` uses:
+
+- `RandomStrategy` (always available baseline)
+- `SimulationEvaluator` over an adapter
+- `OptimizationRunner` for ask/tell orchestration
+- `OptimizationLogger` for deterministic artifacts
 
 ```python
-from research_utils.ml import Parameter, ParameterSpace
-from research_utils.ml.strategies import CMAESStrategy
-
-space = ParameterSpace(parameters=(Parameter("x", bounds=(0.0, 1.0)),))
-strategy = CMAESStrategy(parameter_space=space, seed=123)
+runner = OptimizationRunner(
+    strategy=RandomStrategy(parameter_space=space, seed=21),
+    evaluator=SimulationEvaluator(adapter=adapter),
+    seed=21,
+    logger=OptimizationLogger(output_dir=out, run_name="dummy_optimization"),
+)
+history = runner.run(iterations=8, batch_size=2)
 ```
 
-### Behavior requirements implemented for CMA-ES
+## Artifact expectations for private `*-testbench` repos
 
-- Deterministic random seed (`seed` passed to the CMA backend).
-- Bound-constrained candidate generation (`bounds` passed to CMA backend and output clipped).
-- Runtime dependency guard with install guidance:
-  - `pip install research-utils[ml]`
-  - or `pip install cma`
+When adding optimization in a private testbench, verify:
 
-## Testing checklist for new strategies
-
-- Determinism test (`same seed => same ask() sequence`).
-- Bound enforcement test for generated candidates.
-- `tell()`/history update test, including best-so-far behavior.
-- Optional dependency guard test.
-- Use `pytest.importorskip("<dependency>")` for dependency-specific tests.
+- [ ] extra selection is correct:
+  - `research-utils[harness]` for sweep-only flows
+  - `research-utils[harness,ml]` for optimization flows
+- [ ] run seed is explicit and persisted in run metadata
+- [ ] objective trace is written (`*.jsonl` + `*.csv` from `OptimizationLogger`)
+- [ ] best-so-far snapshots are written (`*.best.jsonl`)
+- [ ] convergence plot is generated (`optimization_convergence.png`)

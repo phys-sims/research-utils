@@ -1,54 +1,51 @@
 # How to write a harness adapter
 
-Adapters convert simulator-specific evaluation calls into canonical `EvalResult` records.
+Adapters convert simulator-specific calls into canonical `EvalResult` records.
 
 ## Adapter contract
 
-Each adapter should expose:
+Each adapter must expose:
 
 - `run(config: dict[str, Any], seed: int) -> EvalResult`
-- deterministic behavior for the same `(config, seed)` input
-- no simulator-specific assumptions leaking into core harness contracts
+- deterministic behavior for identical `(config, seed)` inputs
+- explicit, stable objective/metric extraction
 
-## `PhysPipelineAdapter`
+Keep adapters thin. Put simulator-specific assumptions only in adapter modules.
 
-`PhysPipelineAdapter` in `research_utils.harness.adapters.phys_pipeline` is the reference optional adapter for `phys-pipeline`.
+## Reference: `PhysPipelineAdapter`
+
+`research_utils.harness.adapters.phys_pipeline.PhysPipelineAdapter` is the template.
 
 ```python
-from research_utils.harness.adapters.phys_pipeline import PhysPipelineAdapter
-
 adapter = PhysPipelineAdapter(
-    pipeline=my_pipeline_factory,
+    pipeline=my_pipeline_factory_or_instance,
     objective_key="objective",
-    metric_extractors={
-        "rmse": lambda output: output["rmse"],
-        "latency_ms": lambda output: output["timing_ms"],
-    },
+    metric_extractors={"rmse": lambda out: out["rmse"]},
 )
 ```
 
 ### Constructor inputs
 
-- `pipeline`
-  - a pipeline instance with `run(...)` or `evaluate(...)`, **or**
-  - a factory callable that returns such an instance.
-- `objective_key`
-  - key extracted from pipeline output mapping as the canonical objective.
-- `metric_extractors`
-  - optional mapping from metric name to extractor callable.
-  - each callable receives the raw pipeline output mapping.
+- `pipeline`: instance or factory exposing `run(...)` or `evaluate(...)`
+- `objective_key`: key used for canonical objective
+- `metric_extractors`: optional mapping of metric name to extractor callable
 
 ### Optional dependency behavior
 
-`phys-pipeline` is treated as optional. The adapter imports it only inside this module, and only when a default pipeline is requested (when `pipeline=None`). If unavailable, the adapter raises a clear `ImportError` describing what is missing.
+`phys-pipeline` remains optional and adapter-scoped. Core harness/ML modules do not
+import it directly.
 
-### Canonical output
+## End-to-end dummy example
 
-`run(...)` returns `EvalResult` with:
+Use `examples/dummy_end_to_end.py` to validate adapter behavior inside a complete flow:
 
-- `theta`: numeric values from `config`
-- `objective`: float from `objective_key`
-- `metrics`: extracted metric map
-- `seed`: the explicit seed passed to `run`
+- adapter run output mapped to `EvalResult`
+- deterministic sweep via `InMemoryTestHarness`
+- plotting and optimization artifacts generated from canonical types
 
-Keep adapter logic thin and focused on translation only.
+## Private `*-testbench` adapter checklist
+
+- [ ] Adapter accepts explicit `seed` and forwards it deterministically.
+- [ ] Adapter returns canonical `EvalResult` fields (`theta`, `objective`, `metrics`).
+- [ ] Adapter includes enough provenance/config metadata for reruns.
+- [ ] Adapter does not leak domain logic into harness/ML core packages.

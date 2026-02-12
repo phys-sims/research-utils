@@ -146,6 +146,10 @@ If determinism cannot be guaranteed, document and justify in an ADR.
 
 ## Roadmap / release checklist
 
+Execution planning reference:
+- `docs/v0.2-execution-plan.md` captures the actionable 12-week v0.2 delivery plan,
+  runnable implementation prompts, and release-readiness definition of done.
+
 ### v0.1 — Minimal research-usable core
 Status: ✅ Complete (all checklist items green as of 2026-02-11).
 - [x] Harness core usable in private testbench
@@ -176,8 +180,8 @@ List concrete, reproducible issues only.
 ## Next actions
 Short, concrete, actionable items.
 
-- [x] Bootstrap repo skeleton and CI.
-- [x] Implement EvalResult + SweepResult contracts.
-- [x] Write ADR for core data model.
-- [x] Add first deterministic sweep test.
-- [x] Update this file after first green CI run.
+- [ ] Deliver v0.2 Milestone 1 (ADR closure + roadmap/status reconciliation) from `docs/v0.2-execution-plan.md`.
+- [ ] Deliver v0.2 Milestone 2 (constraint handling v1) with deterministic penalty/feasibility tests.
+- [ ] Deliver v0.2 Milestone 3 (staged + portfolio composition) behind shared strategy contracts.
+- [ ] Deliver v0.2 Milestone 4 (canonical reporting improvements and artifact schema lock tests).
+- [ ] Execute v0.2 release readiness checklist and version/release-note synchronization.

@@ -13,6 +13,15 @@ Each strategy must implement the `OptimizerStrategy` protocol:
 
 The strategy must be deterministic for the same parameter space and seed.
 
+## Composition contract (v0.2)
+
+Composition is also represented as an `OptimizerStrategy`:
+
+- `StagedStrategy`: sequentially executes stage strategies and transitions when a stage converges or hits configured per-stage evaluation limits.
+- `PortfolioStrategy`: deterministic round-robin dispatch across non-converged strategies.
+
+Because composition stays inside the same protocol, existing `OptimizationRunner` integration does not change.
+
 ## Dependency policy
 
 If a strategy depends on third-party packages:
@@ -41,6 +50,19 @@ runner = OptimizationRunner(
 history = runner.run(iterations=8, batch_size=2)
 ```
 
+## Canonical summary artifacts (v0.2)
+
+Use reporting helpers for stable machine-readable summaries:
+
+```python
+from research_utils.harness.reporting import build_optimization_summary, save_summary
+
+summary = build_optimization_summary(history)
+save_summary(summary, out / "optimization.summary.json")
+```
+
+Equivalent sweep summary helpers are available via `build_sweep_summary`.
+
 ## Artifact expectations for private `*-testbench` repos
 
 When adding optimization in a private testbench, verify:
@@ -52,3 +74,4 @@ When adding optimization in a private testbench, verify:
 - [ ] objective trace is written (`*.jsonl` + `*.csv` from `OptimizationLogger`)
 - [ ] best-so-far snapshots are written (`*.best.jsonl`)
 - [ ] convergence plot is generated (`optimization_convergence.png`)
+- [ ] canonical summary is persisted (`optimization.summary.json`)

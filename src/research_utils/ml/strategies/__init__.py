@@ -2,6 +2,7 @@
 
 from research_utils.ml.strategies.base import OptimizerStrategy
 from research_utils.ml.strategies.cmaes import CMAESStrategy
+from research_utils.ml.strategies.composition import PortfolioStrategy, StagedStrategy
 from research_utils.ml.strategies.random import RandomStrategy
 from research_utils.ml.strategies.sobol import SobolStrategy
 
@@ -13,4 +14,6 @@ __all__ = [
     "RandomSearchStrategy",
     "SobolStrategy",
     "CMAESStrategy",
+    "PortfolioStrategy",
+    "StagedStrategy",
 ]

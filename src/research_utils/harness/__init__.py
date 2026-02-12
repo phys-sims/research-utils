@@ -7,6 +7,11 @@ from research_utils.harness.core import (
     SweepSpec,
     TestHarness,
 )
+from research_utils.harness.reporting import (
+    build_optimization_summary,
+    build_sweep_summary,
+    save_summary,
+)
 from research_utils.shared import EvalResult
 
 __all__ = [
@@ -16,4 +21,7 @@ __all__ = [
     "ReportSpec",
     "SweepSpec",
     "TestHarness",
+    "build_optimization_summary",
+    "build_sweep_summary",
+    "save_summary",
 ]

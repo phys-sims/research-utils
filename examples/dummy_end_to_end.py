@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Mapping
 from pathlib import Path
+from typing import Any
 
 from research_utils.harness import InMemoryTestHarness, SweepSpec
 from research_utils.harness.adapters.phys_pipeline import PhysPipelineAdapter
@@ -20,7 +22,7 @@ from research_utils.ml.strategies import RandomStrategy
 class DummyPipeline:
     """Simple deterministic stand-in for an external simulation pipeline."""
 
-    def run(self, config: dict[str, float], seed: int) -> dict[str, float]:
+    def run(self, config: Mapping[str, Any], seed: int) -> Mapping[str, Any]:
         alpha = float(config["alpha"])
         beta = float(config["beta"])
         target_a = 0.35
@@ -117,7 +119,8 @@ def run_example(output_dir: Path) -> dict[str, Path]:
         "sweep_config_hash": sweep_result.config_hash,
         "sweep_provenance": sweep_result.provenance,
     }
-    metadata_path.write_text(json.dumps(metadata_payload, sort_keys=True, indent=2), encoding="utf-8")
+    metadata_json = json.dumps(metadata_payload, sort_keys=True, indent=2)
+    metadata_path.write_text(metadata_json, encoding="utf-8")
 
     return {
         "sweep_table": sweep_table_path,

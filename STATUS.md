@@ -147,8 +147,8 @@ If determinism cannot be guaranteed, document and justify in an ADR.
 ## Roadmap / release checklist
 
 Execution planning reference:
-- `docs/v0.2-execution-plan.md` captures the actionable 12-week v0.2 delivery plan,
-  runnable implementation prompts, and release-readiness definition of done.
+- `docs/v0.2-action-plan.md` captures the execution-ready 6-sprint v0.2 action plan,
+  work-package sequencing, and release-readiness gates.
 
 ### v0.1 — Minimal research-usable core
 Status: ✅ Complete (all checklist items green as of 2026-02-11).
@@ -180,7 +180,7 @@ List concrete, reproducible issues only.
 ## Next actions
 Short, concrete, actionable items.
 
-- [ ] Deliver v0.2 Milestone 1 (ADR closure + roadmap/status reconciliation) from `docs/v0.2-execution-plan.md`.
+- [ ] Deliver v0.2 Milestone 1 (ADR closure + roadmap/status reconciliation) from `docs/v0.2-action-plan.md`.
 - [ ] Deliver v0.2 Milestone 2 (constraint handling v1) with deterministic penalty/feasibility tests.
 - [ ] Deliver v0.2 Milestone 3 (staged + portfolio composition) behind shared strategy contracts.
 - [ ] Deliver v0.2 Milestone 4 (canonical reporting improvements and artifact schema lock tests).

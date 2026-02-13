@@ -215,7 +215,12 @@ def advise_optimization_strategy(
         recommendation.append("random")
         rationale.append("Categorical parameters require strategies supporting mixed spaces.")
     else:
-        if request.budget >= 40 and request.cma_available and request.allow_composition:
+        if (
+            request.budget >= 40
+            and request.scipy_available
+            and request.cma_available
+            and request.allow_composition
+        ):
             recommendation.append("staged[sobol,cmaes]")
             rationale.append("Large numeric budget benefits from global then local search.")
         elif request.scipy_available and request.budget >= 16:

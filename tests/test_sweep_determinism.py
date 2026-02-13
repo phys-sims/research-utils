@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from sim_utils.harness import InMemoryTestHarness, SweepSpec
-from sim_utils.harness.adapters import Adapter
-from sim_utils.shared import EvalResult
+from phys_sims_utils.harness import InMemoryTestHarness, SweepSpec
+from phys_sims_utils.harness.adapters import Adapter
+from phys_sims_utils.shared import EvalResult
 
 
 class QuadraticAdapter(Adapter):

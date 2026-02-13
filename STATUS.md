@@ -1,4 +1,4 @@
-# Project Status (sim-utils)
+# Project Status (phys-sims-utils)
 
 > **Source of truth:** Update this file whenever behavior, contracts, tests, CI, or roadmap state changes.
 >

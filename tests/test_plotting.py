@@ -7,13 +7,13 @@ from pathlib import Path
 
 import pytest
 
-from sim_utils.harness.plotting import (
+from phys_sims_utils.harness.plotting import (
     plot_convergence_best_so_far,
     plot_metric_scatter,
     plot_objective_heatmap_2d,
     plot_objective_slice_1d,
 )
-from sim_utils.shared import EvalResult, OptimizationHistory, SweepResult
+from phys_sims_utils.shared import EvalResult, OptimizationHistory, SweepResult
 
 
 def _configure_agg_backend() -> None:

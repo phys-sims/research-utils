@@ -5,7 +5,7 @@
 
 ## Decision
 
-Define explicit scope boundaries for `sim_utils.agents`:
+Define explicit scope boundaries for `phys_sims_utils.agents`:
 
 - Agent utilities may generate deterministic artifacts (scripts, reports, validation outputs).
 - Agent utilities must remain simulation-agnostic and must not embed physics/domain truth.

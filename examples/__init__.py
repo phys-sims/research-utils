@@ -1,1 +1,1 @@
-"""Runnable examples for sim-utils."""
+"""Runnable examples for phys-sims-utils."""

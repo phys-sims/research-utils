@@ -3,7 +3,7 @@
 ## Scope
 This file applies to the entire repository unless a more specific `AGENTS.md` exists in a subdirectory.
 
-This repository, **research-utils**, provides **shared research infrastructure** for physics simulations and optimization workflows. It is designed to be used by:
+This repository, **phys-sims-utils**, provides **shared research infrastructure** for physics simulations and optimization workflows. It is designed to be used by:
 - simulation libraries that wrap `phys-pipeline` (e.g. `cpa-sim`, `abcdef-sim`)
 - private research/testbench repos (e.g. `abcdef-testbench`)
 - agentic tools that generate experiments, validate structure, or assist optimization
@@ -39,7 +39,7 @@ Simulation-specific logic lives behind **adapters**.
 The harness, ML layer, and agent tools remain **simulation-agnostic**.
 
 If adapting `phys-pipeline`, keep all assumptions isolated in
-`research_utils.harness.adapters`.
+`phys_sims_utils.harness.adapters`.
 
 ### 4) Infrastructure > novelty
 Favor:

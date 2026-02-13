@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Any
 
 Numeric = float
-Theta = dict[str, Numeric]
+Theta = dict[str, Any]
 
 
 @dataclass(frozen=True)

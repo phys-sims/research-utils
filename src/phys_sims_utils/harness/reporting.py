@@ -19,6 +19,9 @@ def build_sweep_summary(result: SweepResult) -> dict[str, Any]:
             for key in evaluation.metrics
         }
     )
+    structure_values = _collect_structure_values(
+        [evaluation.theta for evaluation in result.evaluations]
+    )
 
     return {
         "run_type": "sweep",
@@ -33,6 +36,8 @@ def build_sweep_summary(result: SweepResult) -> dict[str, Any]:
             "mean": (sum(objectives) / len(objectives)) if objectives else None,
         },
         "metrics_present": metric_keys,
+        "structure_keys": sorted(structure_values),
+        "structure_values": structure_values,
     }
 
 
@@ -40,6 +45,9 @@ def build_optimization_summary(history: OptimizationHistory) -> dict[str, Any]:
     """Build a stable summary artifact for an optimization run."""
     objectives = [evaluation.objective for evaluation in history.evaluations]
     best = history.best
+    structure_values = _collect_structure_values(
+        [evaluation.theta for evaluation in history.evaluations]
+    )
 
     return {
         "run_type": "optimization",
@@ -54,7 +62,19 @@ def build_optimization_summary(history: OptimizationHistory) -> dict[str, Any]:
             "mean": (sum(objectives) / len(objectives)) if objectives else None,
         },
         "best": best.to_dict() if best is not None else None,
+        "structure_keys": sorted(structure_values),
+        "structure_values": structure_values,
     }
+
+
+def _collect_structure_values(thetas: list[dict[str, Any]]) -> dict[str, list[Any]]:
+    grouped: dict[str, set[Any]] = {}
+    for theta in thetas:
+        for key, value in theta.items():
+            if isinstance(value, float):
+                continue
+            grouped.setdefault(key, set()).add(value)
+    return {key: sorted(values, key=str) for key, values in sorted(grouped.items())}
 
 
 def save_summary(summary: dict[str, Any], path: str | Path) -> Path:

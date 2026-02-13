@@ -34,8 +34,17 @@ class CMAESStrategy(OptimizerStrategy):
             )
             raise RuntimeError(msg)
 
-        lowers = [float(parameter.bounds[0]) for parameter in self.parameter_space.parameters]
-        uppers = [float(parameter.bounds[1]) for parameter in self.parameter_space.parameters]
+        lowers: list[float] = []
+        uppers: list[float] = []
+        for parameter in self.parameter_space.parameters:
+            if parameter.bounds is None:
+                msg = (
+                    "CMAESStrategy requires bounded numeric parameters; "
+                    f"'{parameter.name}' is categorical"
+                )
+                raise ValueError(msg)
+            lowers.append(float(parameter.bounds[0]))
+            uppers.append(float(parameter.bounds[1]))
         for lower, upper, parameter in zip(
             lowers, uppers, self.parameter_space.parameters, strict=True
         ):
@@ -63,6 +72,12 @@ class CMAESStrategy(OptimizerStrategy):
         encoded = self._optimizer.ask(1)[0]
         theta: dict[str, float] = {}
         for index, parameter in enumerate(self.parameter_space.parameters):
+            if parameter.bounds is None:
+                msg = (
+                    "CMAESStrategy requires bounded numeric parameters; "
+                    f"'{parameter.name}' is categorical"
+                )
+                raise ValueError(msg)
             lower, upper = parameter.bounds
             value = float(encoded[index])
             clipped = min(max(value, lower), upper)

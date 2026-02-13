@@ -14,7 +14,7 @@
 ## Current release snapshot
 
 - **Current package version:** `0.2.0`
-- **Roadmap state:** v0.2 complete; v0.3 scope ratified on 2026-02-13
+- **Roadmap state:** v0.2 complete; v0.3 scope ratified on 2026-02-13; v0.4 scope ratified on 2026-02-13
 - **Release notes:** `docs/releases/v0.2.0.md`
 
 ---
@@ -159,6 +159,7 @@ Execution planning reference:
   work-package sequencing, and release-readiness gates.
 - `docs/v0.3-roadmap.md` captures the planned milestones for mixed-parameter optics
   optimization workflows and lab onboarding.
+- `docs/v0.4-roadmap.md` captures planned agent-first workflows for low-friction lab usage.
 
 ### v0.1 — Minimal research-usable core
 Status: ✅ Complete (all checklist items green as of 2026-02-11).
@@ -186,6 +187,14 @@ Status: 🟨 Planned (scope ratified on 2026-02-13; implementation not started).
 - [ ] Canonical summary/reporting schema updates for structure metadata
 - [ ] Agent tooling templates and validators for mixed-parameter experiments
 - [ ] Lab onboarding quickstart and release-readiness closure
+
+### v0.4 — Agent-first low-friction lab workflows
+Status: 🟨 Planned (scope ratified on 2026-02-13; implementation not started).
+- [ ] Agent workflow contracts for adaptation, optimization advisory, and graphics intents
+- [ ] Deterministic repository adaptation assistant artifacts and validators
+- [ ] Deterministic optimization strategy advisor with rationale + fallback outputs
+- [ ] Chat-oriented graphics/reporting concierge over canonical result contracts
+- [ ] Human + agent onboarding documentation synchronized with ADR and STATUS state
 
 ---
 

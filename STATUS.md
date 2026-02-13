@@ -13,9 +13,9 @@
 
 ## Current release snapshot
 
-- **Current package version:** `0.3.0`
-- **Roadmap state:** v0.2 complete; v0.3 complete on 2026-02-13; v0.4 scope ratified on 2026-02-13
-- **Release notes:** `docs/releases/v0.3.0.md`
+- **Current package version:** `0.4.0`
+- **Roadmap state:** v0.2 complete; v0.3 complete on 2026-02-13; v0.4 complete on 2026-02-13
+- **Release notes:** `docs/releases/v0.4.0.md`
 
 ---
 
@@ -23,7 +23,7 @@
 
 | Check | Command | Status | Last run | Notes |
 | --- | --- | --- | --- | --- |
-| Pre-commit (lint/format) | `python -m pre_commit run -a` | ✅ | 2026-02-13 | Passed locally after v0.3 implementation + release updates. |
+| Pre-commit (lint/format) | `python -m pre_commit run -a` | ✅ | 2026-02-13 | Passed locally after v0.4 implementation + release updates. |
 | Type checking (mypy) | `python -m mypy src tests` | ✅ | 2026-02-13 | Strict mode passes for harness, ML, and agent tooling surfaces. |
 | Pytest fast | `python -m pytest -q -m "not slow" --durations=10` | ✅ | 2026-02-13 | Includes deterministic agent tooling, composition, and reporting schema-lock coverage. |
 | Pytest slow | `python -m pytest -q -m slow --durations=10` | ⬜ | YYYY-MM-DD |  |
@@ -120,7 +120,10 @@ Any breaking change to these requires:
 | Experiment script generator | ✅ | Deterministic generation to `experiments/` with metadata headers (timestamp, seed policy, config hash, provenance). |
 | Repo structure validator | ✅ | Checks for missing seed policy/seed argument, missing config hash/provenance metadata, and invalid parameter paths. |
 | Simulation introspection | ✅ | Deterministic project introspection emits documentation and test-coverage hints without physics assumptions. |
-| Golden-file tests | ✅ | Added golden-file coverage for generated script output format stability. |
+| Repository adaptation assistant | ✅ | Deterministic adaptation report + checklist + shared manifest artifacts via typed workflow request/response contracts. |
+| Optimization strategy advisor | ✅ | Deterministic recommendation outputs with rationale and fallback records constrained to supported strategy interfaces. |
+| Graphics/reporting concierge | ✅ | Structured intents mapped to canonical plotting/reporting helpers over canonical result contracts. |
+| Golden-file and workflow contract tests | ✅ | Golden coverage for script output format plus v0.4 workflow contract/determinism/integration tests. |
 
 Agents must produce **artifacts**, not side effects.
 
@@ -148,7 +151,7 @@ If determinism cannot be guaranteed, document and justify in an ADR.
 | Determinism policy | ✅ | ADR 0003 formalizes explicit seed requirements and deterministic derivation policy. |
 | Result storage format | ✅ | ADR 0005 defines canonical deterministic run-summary JSON artifacts for sweep/optimization reporting helpers. |
 | Optimization interfaces | ✅ | ADR 0004 documents staged/portfolio composition semantics on top of shared ask/tell contracts. |
-| Agent responsibilities | ✅ | ADR 0006 documents agent scope limits, artifact-only behavior, and reproducibility guardrails. |
+| Agent responsibilities | ✅ | ADR 0006 documents agent scope limits, artifact-only behavior, and reproducibility guardrails; ADR 0008 adds v0.4 workflow request/response + manifest/error contracts. |
 
 ---
 
@@ -189,12 +192,12 @@ Status: ✅ Complete (all roadmap commitments shipped and validated on 2026-02-1
 - [x] Lab onboarding quickstart and release-readiness closure
 
 ### v0.4 — Agent-first low-friction lab workflows
-Status: 🟨 Planned (scope ratified on 2026-02-13; implementation not started).
-- [ ] Agent workflow contracts for adaptation, optimization advisory, and graphics intents
-- [ ] Deterministic repository adaptation assistant artifacts and validators
-- [ ] Deterministic optimization strategy advisor with rationale + fallback outputs
-- [ ] Chat-oriented graphics/reporting concierge over canonical result contracts
-- [ ] Human + agent onboarding documentation synchronized with ADR and STATUS state
+Status: ✅ Complete (all roadmap commitments shipped and validated on 2026-02-13).
+- [x] Agent workflow contracts for adaptation, optimization advisory, and graphics intents
+- [x] Deterministic repository adaptation assistant artifacts and validators
+- [x] Deterministic optimization strategy advisor with rationale + fallback outputs
+- [x] Chat-oriented graphics/reporting concierge over canonical result contracts
+- [x] Human + agent onboarding documentation synchronized with ADR and STATUS state
 
 ---
 
@@ -215,4 +218,4 @@ Short, concrete, actionable items.
 - [x] Execute v0.2 release readiness checklist and version/release-note synchronization.
 - [x] Define and ratify v0.3 roadmap scope (post-v0.2 follow-up).
 - [x] Start v0.3 Milestone 1 (mixed-parameter contract extension + ADR + tests).
-- [ ] Start v0.4 Milestone 1 (agent workflow contracts and validation artifacts).
+- [x] Deliver v0.4 roadmap milestones (A-E) with workflow contracts, advisor, concierge, and docs synchronization.

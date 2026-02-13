@@ -5,9 +5,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from sim_utils.harness import build_optimization_summary, build_sweep_summary, save_summary
-from sim_utils.ml.strategies import PortfolioStrategy, RandomStrategy, StagedStrategy
-from sim_utils.shared import EvalResult, OptimizationHistory, SweepResult
+from phys_sims_utils.harness import build_optimization_summary, build_sweep_summary, save_summary
+from phys_sims_utils.ml.strategies import PortfolioStrategy, RandomStrategy, StagedStrategy
+from phys_sims_utils.shared import EvalResult, OptimizationHistory, SweepResult
 
 
 def _result(value: float, *, seed: int) -> EvalResult:

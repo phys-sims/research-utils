@@ -5,7 +5,7 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass, field
 
-from sim_utils.ml import Parameter, ParameterSpace
+from phys_sims_utils.ml import Parameter, ParameterSpace
 
 
 @dataclass

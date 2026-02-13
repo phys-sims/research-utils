@@ -225,7 +225,7 @@ It should include:
 - current version
 - active focus
 - known limitations
-- next planned milestones (e.g. v0.1, v0.2 PyPI releases)
+- next planned milestones (e.g. v1.0, v1.1 PyPI releases)
 
 Use real dates. Do not guess.
 

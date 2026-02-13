@@ -5,7 +5,7 @@
 
 ## Decision
 
-Introduce explicit request/response contracts and deterministic artifact manifests for v0.4
+Introduce explicit request/response contracts and deterministic artifact manifests for v1.2
 agent workflows in `phys_sims_utils.agents.workflows`:
 
 - Adaptation assistant contract for deterministic repository findings + checklist artifacts.

@@ -6,7 +6,7 @@ This page explains what is (and is not) "agentic" in `phys-sims-utils`.
 
 - You **do not** need to write an MCP server to use the built-in agent tooling.
 - UX is still **library-first** (Python APIs and deterministic artifacts).
-- v0.4 adds structured workflow contracts for adaptation, strategy advice, and graphics intents.
+- v1.2 adds structured workflow contracts for adaptation, strategy advice, and graphics intents.
 
 ## What the agent layer provides
 
@@ -35,7 +35,7 @@ Use cases:
 2. CI usage where workflow artifacts are quality gates.
 3. Wrapper usage where a chat/orchestration layer calls these Python contracts.
 
-## Minimal v0.4 usage example
+## Minimal v1.2 usage example
 
 ```python
 import json

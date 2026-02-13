@@ -13,7 +13,7 @@ Each strategy must implement the `OptimizerStrategy` protocol:
 
 The strategy must be deterministic for the same parameter space and seed.
 
-## Composition contract (v0.2)
+## Composition contract (v1.0)
 
 Composition is also represented as an `OptimizerStrategy`:
 
@@ -50,7 +50,7 @@ runner = OptimizationRunner(
 history = runner.run(iterations=8, batch_size=2)
 ```
 
-## Canonical summary artifacts (v0.2)
+## Canonical summary artifacts (v1.0)
 
 Use reporting helpers for stable machine-readable summaries:
 

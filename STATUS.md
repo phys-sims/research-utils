@@ -13,9 +13,9 @@
 
 ## Current release snapshot
 
-- **Current package version:** `0.4.0`
-- **Roadmap state:** v0.2 complete; v0.3 complete on 2026-02-13; v0.4 complete on 2026-02-13
-- **Release notes:** `docs/releases/v0.4.0.md`
+- **Current package version:** `1.2.0`
+- **Roadmap state:** v1.0 complete; v1.1 complete on 2026-02-13; v1.2 complete on 2026-02-13
+- **Release notes:** `docs/releases/v1.2.0.md`
 
 ---
 
@@ -23,7 +23,7 @@
 
 | Check | Command | Status | Last run | Notes |
 | --- | --- | --- | --- | --- |
-| Pre-commit (lint/format) | `python -m pre_commit run -a` | ✅ | 2026-02-13 | Passed locally after v0.4 implementation + release updates. |
+| Pre-commit (lint/format) | `python -m pre_commit run -a` | ✅ | 2026-02-13 | Passed locally after v1.2 implementation + release updates. |
 | Type checking (mypy) | `python -m mypy src tests` | ✅ | 2026-02-13 | Strict mode passes for harness, ML, and agent tooling surfaces. |
 | Pytest fast | `python -m pytest -q -m "not slow" --durations=10` | ✅ | 2026-02-13 | Includes deterministic agent tooling, composition, and reporting schema-lock coverage. |
 | Pytest slow | `python -m pytest -q -m slow --durations=10` | ⬜ | YYYY-MM-DD |  |
@@ -123,7 +123,7 @@ Any breaking change to these requires:
 | Repository adaptation assistant | ✅ | Deterministic adaptation report + checklist + shared manifest artifacts via typed workflow request/response contracts. |
 | Optimization strategy advisor | ✅ | Deterministic recommendation outputs with rationale and fallback records constrained to supported strategy interfaces. |
 | Graphics/reporting concierge | ✅ | Structured intents mapped to canonical plotting/reporting helpers over canonical result contracts. |
-| Golden-file and workflow contract tests | ✅ | Golden coverage for script output format plus v0.4 workflow contract/determinism/integration tests. |
+| Golden-file and workflow contract tests | ✅ | Golden coverage for script output format plus v1.2 workflow contract/determinism/integration tests. |
 
 Agents must produce **artifacts**, not side effects.
 
@@ -151,20 +151,20 @@ If determinism cannot be guaranteed, document and justify in an ADR.
 | Determinism policy | ✅ | ADR 0003 formalizes explicit seed requirements and deterministic derivation policy. |
 | Result storage format | ✅ | ADR 0005 defines canonical deterministic run-summary JSON artifacts for sweep/optimization reporting helpers. |
 | Optimization interfaces | ✅ | ADR 0004 documents staged/portfolio composition semantics on top of shared ask/tell contracts. |
-| Agent responsibilities | ✅ | ADR 0006 documents agent scope limits, artifact-only behavior, and reproducibility guardrails; ADR 0008 adds v0.4 workflow request/response + manifest/error contracts. |
+| Agent responsibilities | ✅ | ADR 0006 documents agent scope limits, artifact-only behavior, and reproducibility guardrails; ADR 0008 adds v1.2 workflow request/response + manifest/error contracts. |
 
 ---
 
 ## Roadmap / release checklist
 
 Execution planning reference:
-- `docs/v0.2-action-plan.md` captures the execution-ready 6-sprint v0.2 action plan,
+- `docs/v1.0-action-plan.md` captures the execution-ready 6-sprint v1.0 action plan,
   work-package sequencing, and release-readiness gates.
-- `docs/v0.3-roadmap.md` captures the planned milestones for mixed-parameter optics
+- `docs/v1.1-roadmap.md` captures the planned milestones for mixed-parameter optics
   optimization workflows and lab onboarding.
-- `docs/v0.4-roadmap.md` captures planned agent-first workflows for low-friction lab usage.
+- `docs/v1.2-roadmap.md` captures planned agent-first workflows for low-friction lab usage.
 
-### v0.1 — Minimal research-usable core
+### Foundational pre-1.0 phase — Minimal research-usable core
 Status: ✅ Complete (all checklist items green as of 2026-02-11).
 - [x] Harness core usable in private testbench
 - [x] phys-pipeline adapter stable
@@ -175,7 +175,7 @@ Status: ✅ Complete (all checklist items green as of 2026-02-11).
 - [x] ADRs written for all core decisions
 - [x] Ready for first PyPI release
 
-### v0.2 — Optimization composition + agents
+### v1.0 — Optimization composition + agents
 Status: ✅ Complete (all roadmap commitments shipped and validated on 2026-02-12).
 - [x] CMA-ES (optional)
 - [x] Strategy composition
@@ -183,7 +183,7 @@ Status: ✅ Complete (all roadmap commitments shipped and validated on 2026-02-1
 - [x] Validation agents
 - [x] Improved reporting
 
-### v0.3 — Mixed-parameter optics optimization workflows
+### v1.1 — Mixed-parameter optics optimization workflows
 Status: ✅ Complete (all roadmap commitments shipped and validated on 2026-02-13).
 - [x] Mixed continuous + discrete/categorical `ParameterSpace` contract extension
 - [x] Deterministic topology-aware optimization runs (component add/remove decisions)
@@ -191,7 +191,7 @@ Status: ✅ Complete (all roadmap commitments shipped and validated on 2026-02-1
 - [x] Agent tooling templates and validators for mixed-parameter experiments
 - [x] Lab onboarding quickstart and release-readiness closure
 
-### v0.4 — Agent-first low-friction lab workflows
+### v1.2 — Agent-first low-friction lab workflows
 Status: ✅ Complete (all roadmap commitments shipped and validated on 2026-02-13).
 - [x] Agent workflow contracts for adaptation, optimization advisory, and graphics intents
 - [x] Deterministic repository adaptation assistant artifacts and validators
@@ -211,11 +211,11 @@ List concrete, reproducible issues only.
 ## Next actions
 Short, concrete, actionable items.
 
-- [x] Deliver v0.2 Milestone 1 (ADR closure + roadmap/status reconciliation) from `docs/v0.2-action-plan.md`.
-- [x] Deliver v0.2 Milestone 2 (constraint handling v1) with deterministic penalty/feasibility tests.
-- [x] Deliver v0.2 Milestone 3 (staged + portfolio composition) behind shared strategy contracts.
-- [x] Deliver v0.2 Milestone 4 (canonical reporting improvements and artifact schema lock tests).
-- [x] Execute v0.2 release readiness checklist and version/release-note synchronization.
-- [x] Define and ratify v0.3 roadmap scope (post-v0.2 follow-up).
-- [x] Start v0.3 Milestone 1 (mixed-parameter contract extension + ADR + tests).
-- [x] Deliver v0.4 roadmap milestones (A-E) with workflow contracts, advisor, concierge, and docs synchronization.
+- [x] Deliver v1.0 Milestone 1 (ADR closure + roadmap/status reconciliation) from `docs/v1.0-action-plan.md`.
+- [x] Deliver v1.0 Milestone 2 (constraint handling v1) with deterministic penalty/feasibility tests.
+- [x] Deliver v1.0 Milestone 3 (staged + portfolio composition) behind shared strategy contracts.
+- [x] Deliver v1.0 Milestone 4 (canonical reporting improvements and artifact schema lock tests).
+- [x] Execute v1.0 release readiness checklist and version/release-note synchronization.
+- [x] Define and ratify v1.1 roadmap scope (post-v1.0 follow-up).
+- [x] Start v1.1 Milestone 1 (mixed-parameter contract extension + ADR + tests).
+- [x] Deliver v1.2 roadmap milestones (A-E) with workflow contracts, advisor, concierge, and docs synchronization.

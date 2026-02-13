@@ -13,8 +13,8 @@ Keep heavy/optional dependencies behind extras and module boundaries:
 
 Package extras are defined in `pyproject.toml` and should map to workflow surfaces:
 
-- `research-utils[harness]`
-- `research-utils[harness,ml]`
+- `sim-utils[harness]`
+- `sim-utils[harness,ml]`
 
 ## Alternatives considered
 

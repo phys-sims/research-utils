@@ -5,9 +5,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from research_utils.ml import OptimizationLogger, OptimizationRunner, Parameter, ParameterSpace
-from research_utils.ml.strategies import RandomStrategy
-from research_utils.shared import EvalResult
+from sim_utils.ml import OptimizationLogger, OptimizationRunner, Parameter, ParameterSpace
+from sim_utils.ml.strategies import RandomStrategy
+from sim_utils.shared import EvalResult
 
 
 def _quadratic_objective(theta: dict[str, float], seed: int) -> EvalResult:

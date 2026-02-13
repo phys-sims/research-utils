@@ -4,9 +4,9 @@ from __future__ import annotations
 
 from typing import Any
 
-from research_utils.harness.adapters import Adapter
-from research_utils.ml import SimulationEvaluator
-from research_utils.shared import EvalResult
+from sim_utils.harness.adapters import Adapter
+from sim_utils.ml import SimulationEvaluator
+from sim_utils.shared import EvalResult
 
 
 class _DummyAdapter(Adapter):

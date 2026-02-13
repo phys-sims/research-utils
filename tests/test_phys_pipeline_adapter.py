@@ -6,8 +6,8 @@ from collections.abc import Mapping
 from typing import Any
 from unittest import mock
 
-import research_utils.harness.adapters.phys_pipeline as phys_adapter_module
-from research_utils.harness.adapters.phys_pipeline import PhysPipelineAdapter
+import sim_utils.harness.adapters.phys_pipeline as phys_adapter_module
+from sim_utils.harness.adapters.phys_pipeline import PhysPipelineAdapter
 
 
 class _DummyPipeline:

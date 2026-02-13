@@ -7,16 +7,16 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
-from research_utils.harness import InMemoryTestHarness, SweepSpec
-from research_utils.harness.adapters.phys_pipeline import PhysPipelineAdapter
-from research_utils.harness.plotting import (
+from sim_utils.harness import InMemoryTestHarness, SweepSpec
+from sim_utils.harness.adapters.phys_pipeline import PhysPipelineAdapter
+from sim_utils.harness.plotting import (
     plot_convergence_best_so_far,
     plot_metric_scatter,
     plot_objective_heatmap_2d,
 )
-from research_utils.ml import OptimizationLogger, OptimizationRunner, Parameter, ParameterSpace
-from research_utils.ml.evaluator import SimulationEvaluator
-from research_utils.ml.strategies import RandomStrategy
+from sim_utils.ml import OptimizationLogger, OptimizationRunner, Parameter, ParameterSpace
+from sim_utils.ml.evaluator import SimulationEvaluator
+from sim_utils.ml.strategies import RandomStrategy
 
 
 class DummyPipeline:

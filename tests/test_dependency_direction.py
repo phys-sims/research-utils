@@ -5,7 +5,7 @@ from __future__ import annotations
 import ast
 from pathlib import Path
 
-SRC_ROOT = Path(__file__).resolve().parents[1] / "src" / "research_utils"
+SRC_ROOT = Path(__file__).resolve().parents[1] / "src" / "sim_utils"
 
 
 def _module_from_file(path: Path) -> str:
@@ -43,7 +43,7 @@ def test_harness_does_not_import_agents() -> None:
     for path in (SRC_ROOT / "harness").rglob("*.py"):
         imports = _imports_for_file(path)
         if any(
-            name == "research_utils.agents" or name.startswith("research_utils.agents.")
+            name == "sim_utils.agents" or name.startswith("sim_utils.agents.")
             for name in imports
         ):
             violations.append(str(path.relative_to(SRC_ROOT.parent)))
@@ -53,7 +53,7 @@ def test_harness_does_not_import_agents() -> None:
 
 def test_phys_pipeline_import_isolated_to_adapter_module() -> None:
     violations: list[str] = []
-    allowed = "research_utils/harness/adapters/phys_pipeline.py"
+    allowed = "sim_utils/harness/adapters/phys_pipeline.py"
 
     for path in SRC_ROOT.rglob("*.py"):
         imports = _imports_for_file(path)

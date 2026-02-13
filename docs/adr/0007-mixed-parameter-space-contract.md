@@ -24,7 +24,7 @@ Both were rejected due to added contract fragmentation and reporting drift risk.
 
 ## Consequences
 
-- v0.2 numeric workflows remain compatible.
+- v1.0 numeric workflows remain compatible.
 - Mixed continuous + structural runs are now first-class and deterministic.
 - Summary schema is expanded in a stable, explicit way for structure-aware analysis.
 

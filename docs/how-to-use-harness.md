@@ -6,7 +6,7 @@ This page shows one deterministic, end-to-end harness flow with a dummy simulato
 
 Reference implementation: `examples/dummy_end_to_end.py`.
 
-It exercises all v0.1 surfaces in one run:
+It exercises all v1.0 surfaces in one run:
 
 - adapter translation (`PhysPipelineAdapter` + dummy pipeline)
 - deterministic sweep execution (`InMemoryTestHarness` + `SweepSpec`)

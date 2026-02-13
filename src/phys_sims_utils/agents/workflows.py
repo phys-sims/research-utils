@@ -1,4 +1,4 @@
-"""Agent-first workflow contracts and deterministic helpers for v0.4."""
+"""Agent-first workflow contracts and deterministic helpers for v1.2."""
 
 from __future__ import annotations
 

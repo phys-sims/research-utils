@@ -1,4 +1,4 @@
-"""v0.4 agent workflow contract and determinism tests."""
+"""v1.2 agent workflow contract and determinism tests."""
 
 from __future__ import annotations
 

@@ -223,7 +223,9 @@ def advise_optimization_strategy(
             rationale.append("Sobol covers numeric spaces efficiently under moderate budget.")
         else:
             recommendation.append("random")
-            rationale.append("Random strategy is always available and deterministic with explicit seed.")
+            rationale.append(
+                "Random strategy is always available and deterministic with explicit seed."
+            )
 
     if not request.scipy_available:
         fallbacks.append("sobol-unavailable-no-scipy")
@@ -364,7 +366,10 @@ def _adaptation_checklist(findings: list[RepoIssue]) -> tuple[str, ...]:
     by_code = {issue.code for issue in findings}
     checklist: list[str] = []
     if "missing-seed-policy" in by_code or "missing-seed-argument" in by_code:
-        checklist.append("Add explicit seed policy metadata and a required main(seed=...) entrypoint.")
+        checklist.append(
+            "Add explicit seed policy metadata and a required main(seed=...) "
+            "entrypoint."
+        )
     if "missing-config-hash" in by_code or "missing-provenance" in by_code:
         checklist.append("Add config hash and provenance metadata headers to generated scripts.")
     if "invalid-parameter-path" in by_code:

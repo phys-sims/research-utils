@@ -102,8 +102,18 @@ def test_graphics_concierge_creates_manifested_sweep_artifacts(tmp_path: Path) -
 
     sweep = SweepResult(
         evaluations=(
-            EvalResult(theta={"alpha": 0.0, "beta": 0.0}, objective=2.0, metrics={"m": 0.5}, seed=1),
-            EvalResult(theta={"alpha": 1.0, "beta": 1.0}, objective=1.0, metrics={"m": 0.3}, seed=2),
+            EvalResult(
+                theta={"alpha": 0.0, "beta": 0.0},
+                objective=2.0,
+                metrics={"m": 0.5},
+                seed=1,
+            ),
+            EvalResult(
+                theta={"alpha": 1.0, "beta": 1.0},
+                objective=1.0,
+                metrics={"m": 0.3},
+                seed=2,
+            ),
         ),
         seed=9,
         parameter_space=("alpha", "beta"),
@@ -149,7 +159,10 @@ def test_graphics_concierge_rejects_unsupported_intent(tmp_path: Path) -> None:
             GraphicsConciergeRequest(
                 result_path=result_path.as_posix(),
                 result_type="optimization",
-                intents=(GraphicsIntent(kind="optimization_summary"), GraphicsIntent(kind="metric_scatter", x="a", y="b")),
+                intents=(
+                    GraphicsIntent(kind="optimization_summary"),
+                    GraphicsIntent(kind="metric_scatter", x="a", y="b"),
+                ),
                 output_dir=(tmp_path / "bad").as_posix(),
             )
         )

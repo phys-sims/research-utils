@@ -2,6 +2,16 @@
 
 Shared research infrastructure for deterministic experimentation.
 
+## Agent tooling quick answers
+
+If you are evaluating the agent layer, start here: `docs/how-to-use-agents.md`.
+
+It answers:
+
+- how agents are used in this repo,
+- whether MCP is required (it is optional), and
+- what UX is available today for non-coding users.
+
 ## Optional dependency extras
 
 Install only the surfaces you need:

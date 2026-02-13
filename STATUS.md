@@ -14,7 +14,7 @@
 ## Current release snapshot
 
 - **Current package version:** `0.2.0`
-- **Roadmap state:** v0.2 complete as of 2026-02-12
+- **Roadmap state:** v0.2 complete; v0.3 scope ratified on 2026-02-13
 - **Release notes:** `docs/releases/v0.2.0.md`
 
 ---
@@ -23,9 +23,9 @@
 
 | Check | Command | Status | Last run | Notes |
 | --- | --- | --- | --- | --- |
-| Pre-commit (lint/format) | `python -m pre_commit run -a` | ✅ | 2026-02-12 | Passed locally during v0.2 roadmap closure/documentation sync. |
-| Type checking (mypy) | `python -m mypy src tests` | ✅ | 2026-02-12 | Strict mode passes for harness, ML, and agent tooling surfaces. |
-| Pytest fast | `python -m pytest -q -m "not slow" --durations=10` | ✅ | 2026-02-12 | Includes deterministic agent tooling, composition, and reporting schema-lock coverage. |
+| Pre-commit (lint/format) | `python -m pre_commit run -a` | ✅ | 2026-02-13 | Passed locally after v0.3 roadmap ratification doc updates. |
+| Type checking (mypy) | `python -m mypy src tests` | ✅ | 2026-02-13 | Strict mode passes for harness, ML, and agent tooling surfaces. |
+| Pytest fast | `python -m pytest -q -m "not slow" --durations=10` | ✅ | 2026-02-13 | Includes deterministic agent tooling, composition, and reporting schema-lock coverage. |
 | Pytest slow | `python -m pytest -q -m slow --durations=10` | ⬜ | YYYY-MM-DD |  |
 
 Rules:
@@ -157,6 +157,8 @@ If determinism cannot be guaranteed, document and justify in an ADR.
 Execution planning reference:
 - `docs/v0.2-action-plan.md` captures the execution-ready 6-sprint v0.2 action plan,
   work-package sequencing, and release-readiness gates.
+- `docs/v0.3-roadmap.md` captures the planned milestones for mixed-parameter optics
+  optimization workflows and lab onboarding.
 
 ### v0.1 — Minimal research-usable core
 Status: ✅ Complete (all checklist items green as of 2026-02-11).
@@ -177,6 +179,14 @@ Status: ✅ Complete (all roadmap commitments shipped and validated on 2026-02-1
 - [x] Validation agents
 - [x] Improved reporting
 
+### v0.3 — Mixed-parameter optics optimization workflows
+Status: 🟨 Planned (scope ratified on 2026-02-13; implementation not started).
+- [ ] Mixed continuous + discrete/categorical `ParameterSpace` contract extension
+- [ ] Deterministic topology-aware optimization runs (component add/remove decisions)
+- [ ] Canonical summary/reporting schema updates for structure metadata
+- [ ] Agent tooling templates and validators for mixed-parameter experiments
+- [ ] Lab onboarding quickstart and release-readiness closure
+
 ---
 
 ## Known issues
@@ -194,4 +204,5 @@ Short, concrete, actionable items.
 - [x] Deliver v0.2 Milestone 3 (staged + portfolio composition) behind shared strategy contracts.
 - [x] Deliver v0.2 Milestone 4 (canonical reporting improvements and artifact schema lock tests).
 - [x] Execute v0.2 release readiness checklist and version/release-note synchronization.
-- [ ] Define and ratify v0.3 roadmap scope (post-v0.2 follow-up).
+- [x] Define and ratify v0.3 roadmap scope (post-v0.2 follow-up).
+- [ ] Start v0.3 Milestone 1 (mixed-parameter contract extension + ADR + tests).

@@ -9,3 +9,4 @@
 | [ADR-0005](0005-run-summary-artifact-schema.md) | ADR 0005: Canonical run-summary artifact schema |  |  |  |  |
 | [ADR-0006](0006-agent-tooling-responsibilities.md) | ADR 0006: Agent tooling responsibilities and limits |  |  |  |  |
 | [ADR-0007](0007-mixed-parameter-space-contract.md) | ADR 0007: Mixed parameter-space contract for continuous + categorical workflows |  |  |  |  |
+| [ADR-0008](0008-agent-workflow-contracts.md) | ADR 0008: Agent workflow contracts for adaptation, advisory, and graphics intents |  |  |  |  |

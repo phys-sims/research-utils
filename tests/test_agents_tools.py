@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from pathlib import Path
 
-from research_utils.agents import (
+from phys_sims_utils.agents import (
     ExperimentScriptSpec,
     ScriptProvenance,
     build_introspection_report,
@@ -78,6 +78,6 @@ def test_sim_introspection_report_is_deterministic() -> None:
 
     assert report_a == report_b
     assert all(
-        hint.startswith("Document module src/research_utils/")
+        hint.startswith("Document module src/phys_sims_utils/")
         for hint in report_a.doc_hints
     )

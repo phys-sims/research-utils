@@ -6,10 +6,10 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-import research_utils.ml.strategies.cmaes as cmaes_module
-from research_utils.ml import Parameter, ParameterSpace
-from research_utils.ml.strategies.cmaes import CMAESStrategy
-from research_utils.shared import EvalResult
+import phys_sims_utils.ml.strategies.cmaes as cmaes_module
+from phys_sims_utils.ml import Parameter, ParameterSpace
+from phys_sims_utils.ml.strategies.cmaes import CMAESStrategy
+from phys_sims_utils.shared import EvalResult
 
 if TYPE_CHECKING:
     from _pytest.monkeypatch import MonkeyPatch
@@ -24,7 +24,7 @@ def test_cmaes_strategy_missing_dependency_error_is_actionable(
     with pytest.raises(RuntimeError, match="optional 'cma' package") as exc_info:
         CMAESStrategy(parameter_space=parameter_space, seed=3)
 
-    assert "research-utils[ml]" in str(exc_info.value)
+    assert "phys-sims-utils[ml]" in str(exc_info.value)
 
 
 def test_cmaes_strategy_is_reproducible_for_same_seed() -> None:

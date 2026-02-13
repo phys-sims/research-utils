@@ -1,6 +1,6 @@
 """Smoke tests for stable import surfaces."""
 
-from research_utils import (
+from phys_sims_utils import (
     AgentArtifact,
     EvalResult,
     OptimizationRunner,
@@ -11,8 +11,8 @@ from research_utils import (
     ml,
     shared,
 )
-from research_utils.harness.plotting import ReportSpec
-from research_utils.ml.strategies import RandomSearchStrategy
+from phys_sims_utils.harness.plotting import ReportSpec
+from phys_sims_utils.ml.strategies import RandomSearchStrategy
 
 
 def test_package_roots_import() -> None:

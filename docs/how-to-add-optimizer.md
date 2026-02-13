@@ -55,7 +55,7 @@ history = runner.run(iterations=8, batch_size=2)
 Use reporting helpers for stable machine-readable summaries:
 
 ```python
-from research_utils.harness.reporting import build_optimization_summary, save_summary
+from phys_sims_utils.harness.reporting import build_optimization_summary, save_summary
 
 summary = build_optimization_summary(history)
 save_summary(summary, out / "optimization.summary.json")
@@ -68,8 +68,8 @@ Equivalent sweep summary helpers are available via `build_sweep_summary`.
 When adding optimization in a private testbench, verify:
 
 - [ ] extra selection is correct:
-  - `research-utils[harness]` for sweep-only flows
-  - `research-utils[harness,ml]` for optimization flows
+  - `phys-sims-utils[harness]` for sweep-only flows
+  - `phys-sims-utils[harness,ml]` for optimization flows
 - [ ] run seed is explicit and persisted in run metadata
 - [ ] objective trace is written (`*.jsonl` + `*.csv` from `OptimizationLogger`)
 - [ ] best-so-far snapshots are written (`*.best.jsonl`)

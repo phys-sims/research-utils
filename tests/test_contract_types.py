@@ -4,16 +4,16 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
 
-from research_utils.harness import (
+from phys_sims_utils.harness import (
     InMemoryTestHarness,
     MetricSpec,
     ReportSpec,
     SweepSpec,
 )
-from research_utils.harness.adapters import Adapter
-from research_utils.ml import OptimizationRunner
-from research_utils.ml.strategies import RandomSearchStrategy
-from research_utils.shared import (
+from phys_sims_utils.harness.adapters import Adapter
+from phys_sims_utils.ml import OptimizationRunner
+from phys_sims_utils.ml.strategies import RandomSearchStrategy
+from phys_sims_utils.shared import (
     Candidate,
     EvalResult,
     OptimizationHistory,

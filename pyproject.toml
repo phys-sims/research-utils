@@ -3,7 +3,7 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "research-utils"
+name = "phys-sims-utils"
 version = "0.2.0"
 description = "Shared research infrastructure for deterministic experimentation"
 readme = "README.md"
@@ -44,7 +44,7 @@ package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["research_utils*"]
+include = ["phys_sims_utils*"]
 
 [tool.ruff]
 line-length = 100
@@ -58,7 +58,7 @@ python_version = "3.11"
 strict = true
 warn_unused_ignores = true
 mypy_path = "src"
-packages = ["research_utils"]
+packages = ["phys_sims_utils"]
 
 
 

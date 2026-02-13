@@ -1,4 +1,4 @@
-# research-utils
+# phys-sims-utils
 
 Shared research infrastructure for deterministic experimentation.
 
@@ -16,12 +16,12 @@ It answers:
 
 Install only the surfaces you need:
 
-- `pip install research-utils[harness]`
-- `pip install research-utils[ml]`
-- `pip install research-utils[agent]`
-- `pip install research-utils[all]`
+- `pip install phys-sims-utils[harness]`
+- `pip install phys-sims-utils[ml]`
+- `pip install phys-sims-utils[agent]`
+- `pip install phys-sims-utils[all]`
 
-`research-utils[ml]` now includes optional optimizer dependencies used by built-in strategies:
+`phys-sims-utils[ml]` now includes optional optimizer dependencies used by built-in strategies:
 
 - `scipy` for `SobolStrategy`
 - `cma` for `CMAESStrategy`
@@ -33,8 +33,8 @@ If you only need CMA-ES support in an existing environment, install:
 ## CMA-ES usage
 
 ```python
-from research_utils.ml import Parameter, ParameterSpace
-from research_utils.ml.strategies import CMAESStrategy
+from phys_sims_utils.ml import Parameter, ParameterSpace
+from phys_sims_utils.ml.strategies import CMAESStrategy
 
 space = ParameterSpace(
     parameters=(
@@ -52,6 +52,6 @@ candidate = strategy.ask()
 bounds for generated candidates, and raises an actionable `RuntimeError` at construction time if
 `cma` is not installed.
 
-`phys-pipeline` remains optional and adapter-scoped. Core modules in `research_utils.harness`,
-`research_utils.ml`, and `research_utils.agents` must not require `phys-pipeline`; direct imports
-are restricted to `research_utils.harness.adapters.phys_pipeline`.
+`phys-pipeline` remains optional and adapter-scoped. Core modules in `phys_sims_utils.harness`,
+`phys_sims_utils.ml`, and `phys_sims_utils.agents` must not require `phys-pipeline`; direct imports
+are restricted to `phys_sims_utils.harness.adapters.phys_pipeline`.

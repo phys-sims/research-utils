@@ -7,3 +7,4 @@
 | [ADR-0003](0003-determinism-policy.md) | ADR 0003: Determinism policy and seed derivation |  |  |  |  |
 | [ADR-0004](0004-optimization-composition-semantics.md) | ADR 0004: Optimization composition semantics (staged and portfolio) |  |  |  |  |
 | [ADR-0005](0005-run-summary-artifact-schema.md) | ADR 0005: Canonical run-summary artifact schema |  |  |  |  |
+| [ADR-0006](0006-agent-tooling-responsibilities.md) | ADR 0006: Agent tooling responsibilities and limits |  |  |  |  |

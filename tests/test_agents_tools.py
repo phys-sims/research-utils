@@ -49,6 +49,7 @@ def test_repo_checks_report_missing_seed_hash_and_invalid_paths() -> None:
         "missing-seed-argument",
         "missing-config-hash",
         "missing-provenance",
+        "missing-structure-metadata",
         "invalid-parameter-path",
     ]
 
@@ -59,6 +60,7 @@ def test_repo_checks_pass_for_generated_script(tmp_path: Path) -> None:
         adapter_import="some_pkg.adapter",
         parameter_paths=("physics.alpha",),
         base_config={"physics": {"alpha": 1.0}},
+        structure_fields=("physics.include_lens",),
     )
     output_path = generate_experiment_script(
         spec,

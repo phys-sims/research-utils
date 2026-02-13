@@ -36,6 +36,7 @@ def check_script_metadata(
     issue_list: list[RepoIssue] = []
     issue_list.extend(_check_missing_seeds(source))
     issue_list.extend(_check_missing_config_hash_or_provenance(source))
+    issue_list.extend(_check_missing_structure_metadata(source))
     issue_list.extend(
         _check_invalid_parameter_paths(source, valid_paths=set(valid_parameter_paths))
     )
@@ -79,6 +80,17 @@ def _check_missing_config_hash_or_provenance(source: str) -> list[RepoIssue]:
             )
         )
     return issues
+
+
+def _check_missing_structure_metadata(source: str) -> list[RepoIssue]:
+    if "# structure_fields:" not in source:
+        return [
+            RepoIssue(
+                code="missing-structure-metadata",
+                message="Missing '# structure_fields:' metadata header.",
+            )
+        ]
+    return []
 
 
 def _check_invalid_parameter_paths(source: str, *, valid_paths: set[str]) -> list[RepoIssue]:

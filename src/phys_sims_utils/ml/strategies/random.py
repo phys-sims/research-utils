@@ -34,7 +34,7 @@ class RandomStrategy(OptimizerStrategy):
             msg = "parameter_space is required"
             raise RuntimeError(msg)
         theta = {
-            parameter.name: self._rng.uniform(parameter.bounds[0], parameter.bounds[1])
+            parameter.name: parameter.sample(rng=self._rng)
             for parameter in parameter_space.parameters
         }
         return Candidate(theta=theta)

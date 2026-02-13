@@ -13,9 +13,9 @@
 
 ## Current release snapshot
 
-- **Current package version:** `0.2.0`
-- **Roadmap state:** v0.2 complete; v0.3 scope ratified on 2026-02-13; v0.4 scope ratified on 2026-02-13
-- **Release notes:** `docs/releases/v0.2.0.md`
+- **Current package version:** `0.3.0`
+- **Roadmap state:** v0.2 complete; v0.3 complete on 2026-02-13; v0.4 scope ratified on 2026-02-13
+- **Release notes:** `docs/releases/v0.3.0.md`
 
 ---
 
@@ -23,7 +23,7 @@
 
 | Check | Command | Status | Last run | Notes |
 | --- | --- | --- | --- | --- |
-| Pre-commit (lint/format) | `python -m pre_commit run -a` | ✅ | 2026-02-13 | Passed locally after v0.3 roadmap ratification doc updates. |
+| Pre-commit (lint/format) | `python -m pre_commit run -a` | ✅ | 2026-02-13 | Passed locally after v0.3 implementation + release updates. |
 | Type checking (mypy) | `python -m mypy src tests` | ✅ | 2026-02-13 | Strict mode passes for harness, ML, and agent tooling surfaces. |
 | Pytest fast | `python -m pytest -q -m "not slow" --durations=10` | ✅ | 2026-02-13 | Includes deterministic agent tooling, composition, and reporting schema-lock coverage. |
 | Pytest slow | `python -m pytest -q -m slow --durations=10` | ⬜ | YYYY-MM-DD |  |
@@ -143,7 +143,7 @@ If determinism cannot be guaranteed, document and justify in an ADR.
 
 | Area | ADR exists? | Notes |
 | --- | --- | --- |
-| Core contracts | ✅ | ADR 0001 documents canonical shared result contracts. |
+| Core contracts | ✅ | ADR 0001 documents canonical shared result contracts; ADR 0007 extends ParameterSpace for mixed numeric/categorical search. |
 | Dependency boundaries | ✅ | ADR 0002 defines optional extras and adapter-scoped simulator dependencies. |
 | Determinism policy | ✅ | ADR 0003 formalizes explicit seed requirements and deterministic derivation policy. |
 | Result storage format | ✅ | ADR 0005 defines canonical deterministic run-summary JSON artifacts for sweep/optimization reporting helpers. |
@@ -181,12 +181,12 @@ Status: ✅ Complete (all roadmap commitments shipped and validated on 2026-02-1
 - [x] Improved reporting
 
 ### v0.3 — Mixed-parameter optics optimization workflows
-Status: 🟨 Planned (scope ratified on 2026-02-13; implementation not started).
-- [ ] Mixed continuous + discrete/categorical `ParameterSpace` contract extension
-- [ ] Deterministic topology-aware optimization runs (component add/remove decisions)
-- [ ] Canonical summary/reporting schema updates for structure metadata
-- [ ] Agent tooling templates and validators for mixed-parameter experiments
-- [ ] Lab onboarding quickstart and release-readiness closure
+Status: ✅ Complete (all roadmap commitments shipped and validated on 2026-02-13).
+- [x] Mixed continuous + discrete/categorical `ParameterSpace` contract extension
+- [x] Deterministic topology-aware optimization runs (component add/remove decisions)
+- [x] Canonical summary/reporting schema updates for structure metadata
+- [x] Agent tooling templates and validators for mixed-parameter experiments
+- [x] Lab onboarding quickstart and release-readiness closure
 
 ### v0.4 — Agent-first low-friction lab workflows
 Status: 🟨 Planned (scope ratified on 2026-02-13; implementation not started).
@@ -214,4 +214,5 @@ Short, concrete, actionable items.
 - [x] Deliver v0.2 Milestone 4 (canonical reporting improvements and artifact schema lock tests).
 - [x] Execute v0.2 release readiness checklist and version/release-note synchronization.
 - [x] Define and ratify v0.3 roadmap scope (post-v0.2 follow-up).
-- [ ] Start v0.3 Milestone 1 (mixed-parameter contract extension + ADR + tests).
+- [x] Start v0.3 Milestone 1 (mixed-parameter contract extension + ADR + tests).
+- [ ] Start v0.4 Milestone 1 (agent workflow contracts and validation artifacts).

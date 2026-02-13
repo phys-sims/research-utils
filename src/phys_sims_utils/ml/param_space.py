@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Callable, MutableMapping, Sequence
 from copy import deepcopy
 from dataclasses import dataclass, is_dataclass
-from typing import Any, Protocol
+from typing import Any, Protocol, cast
 
 
 class ParameterTransform(Protocol):
@@ -19,6 +19,7 @@ class ParameterTransform(Protocol):
 
 
 TransformTuple = tuple[Callable[[float], float], Callable[[float], float]]
+ParameterValue = float | int | str | bool
 
 
 @dataclass(frozen=True)
@@ -26,14 +27,25 @@ class Parameter:
     """Parameter descriptor with optional path and transform."""
 
     name: str
-    bounds: tuple[float, float]
+    bounds: tuple[float, float] | None = None
+    choices: tuple[ParameterValue, ...] | None = None
     transform: ParameterTransform | TransformTuple | None = None
     path: str | None = None
 
     def __post_init__(self) -> None:
-        lower, upper = self.bounds
-        if lower > upper:
-            msg = f"Invalid bounds for '{self.name}': {self.bounds}"
+        if self.bounds is None and self.choices is None:
+            msg = f"Parameter '{self.name}' must define either bounds or choices"
+            raise ValueError(msg)
+        if self.bounds is not None and self.choices is not None:
+            msg = f"Parameter '{self.name}' cannot define both bounds and choices"
+            raise ValueError(msg)
+        if self.bounds is not None:
+            lower, upper = self.bounds
+            if lower > upper:
+                msg = f"Invalid bounds for '{self.name}': {self.bounds}"
+                raise ValueError(msg)
+        if self.choices is not None and len(self.choices) == 0:
+            msg = f"Parameter '{self.name}' choices must not be empty"
             raise ValueError(msg)
 
     @property
@@ -41,17 +53,33 @@ class Parameter:
         """Dot path used for reading/writing this parameter."""
         return self.path if self.path is not None else self.name
 
-    def to_encoded(self, value: float) -> float:
+    def to_encoded(self, value: ParameterValue) -> float:
         """Convert config-space value to encoded optimizer value."""
         self.validate(value)
+        if self.choices is not None:
+            return float(self.choices.index(value))
+        if not isinstance(value, (int, float)):
+            msg = f"Parameter '{self.name}' requires numeric values"
+            raise ValueError(msg)
+        numeric_value = float(value)
         if self.transform is None:
-            return value
+            return numeric_value
         if isinstance(self.transform, tuple):
-            return self.transform[0](value)
-        return self.transform.encode(value)
+            return self.transform[0](numeric_value)
+        return self.transform.encode(numeric_value)
 
-    def from_encoded(self, value: float) -> float:
+    def from_encoded(self, value: float) -> ParameterValue:
         """Convert encoded optimizer value to config-space value."""
+        if self.choices is not None:
+            index = int(round(value))
+            if index < 0 or index >= len(self.choices):
+                msg = (
+                    f"Parameter '{self.name}' categorical index out of bounds: "
+                    f"{index} not in [0, {len(self.choices) - 1}]"
+                )
+                raise ValueError(msg)
+            return self.choices[index]
+
         if self.transform is None:
             decoded = value
         elif isinstance(self.transform, tuple):
@@ -61,15 +89,38 @@ class Parameter:
         self.validate(decoded)
         return decoded
 
-    def validate(self, value: float) -> None:
+    def validate(self, value: ParameterValue) -> None:
         """Validate a config-space value against inclusive bounds."""
+        if self.choices is not None:
+            if value not in self.choices:
+                msg = f"Parameter '{self.name}' invalid categorical choice: {value!r}"
+                raise ValueError(msg)
+            return
+
+        if self.bounds is None:
+            msg = f"Parameter '{self.name}' missing bounds"
+            raise ValueError(msg)
+        if not isinstance(value, (int, float)):
+            msg = f"Parameter '{self.name}' requires numeric values"
+            raise ValueError(msg)
+
         lower, upper = self.bounds
-        if value < lower or value > upper:
+        numeric_value = float(value)
+        if numeric_value < lower or numeric_value > upper:
             msg = (
-                f"Parameter '{self.name}' out of bounds: {value} not in "
+                f"Parameter '{self.name}' out of bounds: {numeric_value} not in "
                 f"[{lower}, {upper}]"
             )
             raise ValueError(msg)
+
+    def sample(self, *, rng: Any) -> ParameterValue:
+        """Draw one deterministic sample in config space."""
+        if self.choices is not None:
+            return cast(ParameterValue, self.choices[rng.randrange(len(self.choices))])
+        if self.bounds is None:
+            msg = f"Parameter '{self.name}' missing bounds"
+            raise ValueError(msg)
+        return float(rng.uniform(self.bounds[0], self.bounds[1]))
 
 
 @dataclass(frozen=True)
@@ -85,7 +136,7 @@ class ParameterSpace:
     def encode(self, config: Any) -> tuple[float, ...]:
         """Encode config object values in parameter order."""
         return tuple(
-            parameter.to_encoded(float(_get_by_path(config, parameter.resolved_path)))
+            parameter.to_encoded(_get_by_path(config, parameter.resolved_path))
             for parameter in self.parameters
         )
 
@@ -172,4 +223,4 @@ def _assign_segment(obj: Any, segment: str, value: Any) -> None:
     raise KeyError(msg)
 
 
-__all__ = ["Parameter", "ParameterSpace", "ParameterTransform"]
+__all__ = ["Parameter", "ParameterSpace", "ParameterTransform", "ParameterValue"]

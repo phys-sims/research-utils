@@ -37,6 +37,12 @@ class SobolStrategy(OptimizerStrategy):
         sample = self._engine.random(1)[0]
         theta = {}
         for index, parameter in enumerate(self.parameter_space.parameters):
+            if parameter.bounds is None:
+                msg = (
+                    "SobolStrategy requires bounded numeric parameters; "
+                    f"'{parameter.name}' is categorical"
+                )
+                raise ValueError(msg)
             lower, upper = parameter.bounds
             theta[parameter.name] = lower + (upper - lower) * float(sample[index])
         return Candidate(theta=theta)

@@ -8,7 +8,7 @@ from dataclasses import dataclass, field
 from phys_sims_utils.ml.evaluator import SimulationEvaluator
 from phys_sims_utils.ml.logging import OptimizationLogger
 from phys_sims_utils.ml.strategies.base import OptimizerStrategy
-from phys_sims_utils.shared import EvalResult, OptimizationHistory
+from phys_sims_utils.shared import EvalResult, OptimizationHistory, Theta
 
 
 @dataclass
@@ -16,7 +16,7 @@ class OptimizationRunner:
     """Run ask/tell optimization loops with deterministic bookkeeping."""
 
     strategy: OptimizerStrategy | None = None
-    evaluator: SimulationEvaluator | Callable[[dict[str, float], int], EvalResult] | None = None
+    evaluator: SimulationEvaluator | Callable[[Theta, int], EvalResult] | None = None
     seed: int = 0
     penalty_objective: float = 1.0e12
     history: list[EvalResult] = field(default_factory=list)
@@ -71,7 +71,7 @@ class OptimizationRunner:
             self.logger.close()
         return self.result
 
-    def _safe_evaluate(self, theta: dict[str, float], seed: int) -> EvalResult:
+    def _safe_evaluate(self, theta: Theta, seed: int) -> EvalResult:
         evaluator = self.evaluator
         if evaluator is None:
             msg = "OptimizationRunner has no evaluator"

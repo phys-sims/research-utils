@@ -8,3 +8,4 @@
 | [ADR-0004](0004-optimization-composition-semantics.md) | ADR 0004: Optimization composition semantics (staged and portfolio) |  |  |  |  |
 | [ADR-0005](0005-run-summary-artifact-schema.md) | ADR 0005: Canonical run-summary artifact schema |  |  |  |  |
 | [ADR-0006](0006-agent-tooling-responsibilities.md) | ADR 0006: Agent tooling responsibilities and limits |  |  |  |  |
+| [ADR-0007](0007-mixed-parameter-space-contract.md) | ADR 0007: Mixed parameter-space contract for continuous + categorical workflows |  |  |  |  |

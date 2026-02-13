@@ -93,3 +93,30 @@ def test_nested_path_assignment_correctness() -> None:
             assert isinstance(base, ContainerLike)
             assert updated.model.value == expected
             assert base.model.value == 0.0
+
+
+def test_mixed_parameter_space_round_trip_with_categorical_values() -> None:
+    parameter_space = ParameterSpace(
+        parameters=(
+            Parameter(name="spacing", bounds=(0.1, 1.0)),
+            Parameter(name="lens_type", choices=("convex", "concave")),
+            Parameter(name="enabled", choices=(False, True)),
+        )
+    )
+
+    config = {"spacing": 0.5, "lens_type": "concave", "enabled": True}
+    encoded = parameter_space.encode(config)
+    decoded = parameter_space.decode(encoded, base={})
+
+    assert encoded == (0.5, 1.0, 1.0)
+    assert decoded == config
+
+
+def test_parameter_rejects_invalid_categorical_choice() -> None:
+    parameter = Parameter(name="lens_type", choices=("convex", "concave"))
+
+    try:
+        parameter.to_encoded("prism")
+        raise AssertionError("Expected categorical validation to fail")
+    except ValueError as exc:
+        assert "invalid categorical choice" in str(exc)

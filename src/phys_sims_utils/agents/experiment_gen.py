@@ -20,6 +20,7 @@ class ExperimentScriptSpec:
     base_config: dict[str, Any]
     entrypoint: str = "run"
     seed_policy: str = "explicit-seed-required"
+    structure_fields: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -77,6 +78,7 @@ def _render_script(
     parameter_paths = "\n".join(
         f'    "{path}",' for path in sorted(spec.parameter_paths)
     )
+    structure_fields = json.dumps(sorted(spec.structure_fields))
     base_config = json.dumps(spec.base_config, indent=2, sort_keys=True)
 
     return (
@@ -84,7 +86,8 @@ def _render_script(
         f"# timestamp: {timestamp}\n"
         f"# seed_policy: {spec.seed_policy}\n"
         f"# config_hash: {config_hash}\n"
-        f"# provenance: {provenance.to_json()}\n\n"
+        f"# provenance: {provenance.to_json()}\n"
+        f"# structure_fields: {structure_fields}\n\n"
         "from __future__ import annotations\n\n"
         "import json\n"
         "from pathlib import Path\n\n"
@@ -117,6 +120,7 @@ def _config_hash(spec: ExperimentScriptSpec) -> str:
         "name": spec.name,
         "parameter_paths": sorted(spec.parameter_paths),
         "seed_policy": spec.seed_policy,
+        "structure_fields": sorted(spec.structure_fields),
     }
     encoded = json.dumps(payload, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(encoded.encode("utf-8")).hexdigest()

@@ -1,6 +1,6 @@
 # How to use the agent tooling
 
-This page explains what is (and is not) "agentic" in `research-utils`, and how teams can use it
+This page explains what is (and is not) "agentic" in `sim-utils`, and how teams can use it
 without writing a custom MCP server.
 
 ## TL;DR
@@ -12,7 +12,7 @@ without writing a custom MCP server.
 
 ## What the agent layer provides
 
-The agent layer in `research_utils.agents` focuses on deterministic infrastructure tasks:
+The agent layer in `sim_utils.agents` focuses on deterministic infrastructure tasks:
 
 - **Experiment generation**: `generate_experiment_script(...)` writes a reproducible downstream script with
   seed policy, config hash, and provenance headers.
@@ -56,7 +56,7 @@ This gives non-coders a guided workflow without asking them to write core logic.
 
 Yes, in an infrastructure sense.
 
-`research-utils` treats agents as deterministic tooling that:
+`sim-utils` treats agents as deterministic tooling that:
 
 - synthesizes structured artifacts,
 - validates policy/contract compliance,
@@ -71,7 +71,7 @@ That boundary is intentional and aligned with the project's architecture/ADR dir
 from datetime import datetime, timezone
 from pathlib import Path
 
-from research_utils.agents import (
+from sim_utils.agents import (
     ExperimentScriptSpec,
     ScriptProvenance,
     check_script_metadata,

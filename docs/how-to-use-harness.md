@@ -50,8 +50,8 @@ A matching integration test validates these artifacts in
 Use this checklist before wiring your simulator:
 
 - [ ] Install extras:
-  - harness-only workflows: `pip install research-utils[harness]`
-  - harness + optimization workflows: `pip install research-utils[harness,ml]`
+  - harness-only workflows: `pip install sim-utils[harness]`
+  - harness + optimization workflows: `pip install sim-utils[harness,ml]`
 - [ ] Make seed part of every public experiment entrypoint.
 - [ ] Record provenance (repo commit, package versions, config hash).
 - [ ] Emit canonical artifact layout:

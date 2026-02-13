@@ -1,4 +1,4 @@
-# Project Status (research-utils)
+# Project Status (sim-utils)
 
 > **Source of truth:** Update this file whenever behavior, contracts, tests, CI, or roadmap state changes.
 >

@@ -14,7 +14,7 @@ Keep adapters thin. Put simulator-specific assumptions only in adapter modules.
 
 ## Reference: `PhysPipelineAdapter`
 
-`research_utils.harness.adapters.phys_pipeline.PhysPipelineAdapter` is the template.
+`sim_utils.harness.adapters.phys_pipeline.PhysPipelineAdapter` is the template.
 
 ```python
 adapter = PhysPipelineAdapter(

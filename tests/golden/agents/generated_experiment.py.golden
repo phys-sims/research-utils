@@ -2,7 +2,7 @@
 # timestamp: 2026-01-02T03:04:05Z
 # seed_policy: explicit-seed-required
 # config_hash: 1c0f4eecfa12f4d805138a7570b54edb0179c3745bd3f9d3a5563fc914724a5f
-# provenance: {"generator": "research_utils.agents.experiment_gen", "git_commit": "deadbeef", "package_version": "0.0.0"}
+# provenance: {"generator": "sim_utils.agents.experiment_gen", "git_commit": "deadbeef", "package_version": "0.0.0"}
 
 from __future__ import annotations
 

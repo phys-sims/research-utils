@@ -1,1 +1,1 @@
-"""Runnable examples for research-utils."""
+"""Runnable examples for sim-utils."""

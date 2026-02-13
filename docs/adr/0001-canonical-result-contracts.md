@@ -5,7 +5,7 @@
 
 ## Decision
 
-Use `EvalResult`, `SweepResult`, and `OptimizationHistory` in `research_utils.shared.types`
+Use `EvalResult`, `SweepResult`, and `OptimizationHistory` in `sim_utils.shared.types`
 as the canonical cross-layer contracts.
 
 Key contract decisions:
